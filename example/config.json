@@ -1,0 +1,7 @@
+{
+  "dest": "dist/installers/",
+  "icon": "resources/Icon.png",
+  "categories": [
+    "Utility"
+  ]
+}
