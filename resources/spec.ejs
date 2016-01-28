@@ -1,0 +1,24 @@
+<% if (name) { %>Name: <%= name %>
+<% } %><% if (version) { %>Version: <%= version %>
+<% } %><% if (revision) { %>Release: <%= revision %>%{?dist}
+<% } %><% if (description) { %>Summary: <%= description %>
+<% } %><% if (homepage) { %>URL: <%= homepage %>
+<% } %><% if (license) { %>License: <%= license %>
+<% } %><% if (group) { %>Group: <%= group %>
+<% } %>
+AutoReqProv: no
+<% if (requires) { %>Requires: <%= requires.join(', ') %>
+<% } %><% if (productDescription) { %>
+%description
+<%= productDescription %>
+<% } %>
+%install
+mkdir -p %{buildroot}/usr/
+cp -r usr/* %{buildroot}/usr/
+
+%files
+/usr/bin/<%= name %>
+/usr/share/<%= name %>/
+/usr/share/applications/<%= name %>.desktop
+/usr/share/doc/<%= name %>/
+/usr/share/pixmaps/<%= name %>.png
