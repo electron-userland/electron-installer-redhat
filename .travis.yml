@@ -11,5 +11,13 @@ addons:
     packages:
       - rpm
 
+deploy:
+  provider: npm
+  email: unindented@gmail.com
+  api_key:
+    secure: SCEakXCfoTm9TKgRczg3UlIt6hN4Nk8UDv6w93rYrNQSLX6JTLBpDHCUjVDCLLctox5MqIpPZ52x2IKzfiZh0qmM/htbDRT8DPl8lpd9Yw8wrxEHQjAvykAcR7sEX1fr2r2ptN7TwJNsJFqR6GwWMFiOk+Z1yZEZ1z2LoAQBjwbaN9cEeeKGXfN7Obq8xuIlvHyj59bqbcRxADy6C8Zlwvy3k/tEV70/LGwC2Mb7Fabh8MbznALTcYf9J02B8eOrLmQTB4kf0VctJuOpBkFdsbI4ZFvGWFzTeGRb5N577+CD8r/ueoVoxxWG2UE/Lzd/1j9l5IyEnhKA/0YVuU0pDYN+uXvIXHBoKPn35h0IfI6qVXU5756/oGvGH1OIBr0BfHvJZ/yVPo1/FHogdR6rMOPKBbytWEKqZtSm+HPq2kGKnZAD64hETJitQ/T9nPq2HZE/yh3JPWvBbJbutWf+LVyPc0F0CqnAPIDuuLEJ2ky2j72qFQrVXZESdIjAfHBK8G04zuK0acxbQBUgvuU0rRqLoLf/qr8srr2J/uJP1HDyccH5BXa2EQiuqWHbVk9RLcE/SEJ1kT4yQbl9MMqAx5aL+90Um5g0foE7zNBUSchVpF19k5r1Ai9ehcHDFa6LivySKjbRZESAiPzG0BhdYgVuMaPIDRsF89eFByxCsbc=
+  on:
+    tags: true
+
 after_success:
   - rpmlint test/fixtures/out/*.rpm
