@@ -39,7 +39,9 @@ describe('module', function () {
         },
 
         options: {
-          icon: 'test/fixtures/icon.png',
+          icon: {
+            '1024x1024': 'test/fixtures/icon.png'
+          },
           bin: 'resources/cli/bar.sh',
           productDescription: 'Just a test.',
           arch: 'x86_64',

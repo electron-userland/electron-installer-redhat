@@ -21,4 +21,6 @@ cp -r usr/* %{buildroot}/usr/
 /usr/share/<%= name %>/
 /usr/share/applications/<%= name %>.desktop
 /usr/share/doc/<%= name %>/
-/usr/share/pixmaps/<%= name %>.png
+<% if (_.isObject(icon)) { %><% _.forEach(icon, function (path, resolution) { %>/usr/share/icons/hicolor/<%= resolution %>/apps/<%= name %>.png
+<% }) } else { %>/usr/share/pixmaps/<%= name %>.png
+<% } %>
