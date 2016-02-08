@@ -1,7 +1,7 @@
 'use strict'
 
-var fs = require('fs')
 var rimraf = require('rimraf')
+var access = require('./helpers/access')
 var spawn = require('./helpers/spawn')
 
 describe('cli', function () {
@@ -23,7 +23,7 @@ describe('cli', function () {
     })
 
     it('generates a `.rpm` package', function (done) {
-      fs.access(dest + 'footest-0.0.1.x86.rpm', done)
+      access(dest + 'footest-0.0.1.x86.rpm', done)
     })
   })
 
@@ -43,7 +43,7 @@ describe('cli', function () {
     })
 
     it('generates a `.rpm` package', function (done) {
-      fs.access(dest + 'bartest-0.0.1.x86_64.rpm', done)
+      access(dest + 'bartest-0.0.1.x86_64.rpm', done)
     })
   })
 })

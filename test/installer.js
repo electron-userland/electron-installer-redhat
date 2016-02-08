@@ -2,9 +2,9 @@
 
 var installer = require('..')
 
-var fs = require('fs')
 var path = require('path')
 var rimraf = require('rimraf')
+var access = require('./helpers/access')
 
 describe('module', function () {
   this.timeout(10000)
@@ -32,7 +32,7 @@ describe('module', function () {
     })
 
     it('generates a `.rpm` package', function (done) {
-      fs.access(dest + 'footest.x86.rpm', done)
+      access(dest + 'footest.x86.rpm', done)
     })
   })
 
@@ -66,7 +66,7 @@ describe('module', function () {
     })
 
     it('generates a `.rpm` package', function (done) {
-      fs.access(dest + 'bartest.x86_64.rpm', done)
+      access(dest + 'bartest.x86_64.rpm', done)
     })
   })
 })
