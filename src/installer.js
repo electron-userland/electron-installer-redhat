@@ -128,6 +128,10 @@ var getDefaults = function (data, callback) {
         'GNOME',
         'GTK',
         'Utility'
+      ],
+
+      mimes: [
+        'text/plain'
       ]
     }
 
