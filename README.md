@@ -351,6 +351,13 @@ Categories in which the application should be shown in a menu, used in the [`Cat
 
 For possible values check out the [Desktop Menu Specification](http://standards.freedesktop.org/menu-spec/latest/apa.html).
 
+#### options.mimes
+Type: `Array[String]`
+Default: `['text/plain']`
+
+Allow associating the application with different MIME-types. For exmaple if you are developing a music player you may want to associate the application with one or more audio MIME-types.
+
+[List with popular mime types](https://www.iana.org/assignments/media-types/media-types.xhtml)
 
 ## Meta
 
