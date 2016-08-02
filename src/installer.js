@@ -128,7 +128,9 @@ var getDefaults = function (data, callback) {
         'GNOME',
         'GTK',
         'Utility'
-      ]
+      ],
+
+      mimeType: []
     }
 
     callback(err, defaults)

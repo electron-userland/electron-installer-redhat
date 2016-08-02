@@ -56,6 +56,9 @@ describe('module', function () {
           arch: 'x86_64',
           categories: [
             'Utility'
+          ],
+          mimeType: [
+            'text/plain'
           ]
         }
       }, done)
