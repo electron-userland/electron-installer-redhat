@@ -130,7 +130,7 @@ var getDefaults = function (data, callback) {
         'Utility'
       ],
 
-      mimes : [
+      mimes: [
         'text/plain'
       ]
     }
