@@ -99,10 +99,10 @@ $ npm install -g electron-installer-redhat
 And point it to your built app:
 
 ```
-$ electron-installer-redhat --src dist/app-linux-x64/ --dest dist/installers/ --arch amd64
+$ electron-installer-redhat --src dist/app-linux-x64/ --dest dist/installers/ --arch x86_64
 ```
 
-You'll end up with the package at `dist/installers/app_0.0.1_amd64.rpm`.
+You'll end up with the package at `dist/installers/app_0.0.1_x86_64.rpm`.
 
 ### Scripts
 
@@ -122,7 +122,7 @@ Edit the `scripts` section of your `package.json`:
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . app --platform linux --arch x64 --out dist/",
-    "rpm64": "electron-installer-redhat --src dist/app-linux-x64/ --dest dist/installers/ --arch amd64"
+    "rpm64": "electron-installer-redhat --src dist/app-linux-x64/ --dest dist/installers/ --arch x86_64"
   },
   "devDependencies": {
     "electron-installer-redhat": "*",
@@ -138,7 +138,7 @@ And run the script:
 $ npm run rpm64
 ```
 
-You'll end up with the package at `dist/installers/app_0.0.1_amd64.rpm`.
+You'll end up with the package at `dist/installers/app_0.0.1_x86_64.rpm`.
 
 ### Programmatically
 
@@ -156,7 +156,7 @@ var installer = require('electron-installer-redhat')
 var options = {
   src: 'dist/app-linux-x64/',
   dest: 'dist/installers/',
-  arch: 'amd64'
+  arch: 'x86_64'
 }
 
 console.log('Creating package (this may take a while)')
@@ -171,7 +171,7 @@ installer(options, function (err) {
 })
 ```
 
-You'll end up with the package at `dist/installers/app_0.0.1_amd64.rpm`.
+You'll end up with the package at `dist/installers/app_0.0.1_x86_64.rpm`.
 
 ### Options
 
@@ -190,7 +190,7 @@ Even though you can pass most of these options through the command-line interfac
 And pass that instead with the `config` option:
 
 ```
-$ electron-installer-redhat --src dist/app-linux-x64/ --arch amd64 --config config.json
+$ electron-installer-redhat --src dist/app-linux-x64/ --arch x86_64 --config config.json
 ```
 
 Anyways, here's the full list of options:
