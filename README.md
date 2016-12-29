@@ -287,6 +287,12 @@ Default: `package.homepage || package.author.url`
 
 URL of the homepage for the package, used in the [`Homepage` field of the `control` specification](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
+#### options.compressionLevel
+Type: `Number`
+Default: `2`
+
+Package compression level, from `0` to `9`.
+
 #### options.bin
 Type: `String`
 Default: `package.name`
