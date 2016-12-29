@@ -324,6 +324,12 @@ And a desktop specification with the following `Exec` key:
 Exec=foo %U
 ```
 
+#### options.execArguments
+Type: `Array[String]`
+Default: `[]`
+
+Command-line arguments to pass to the executable. Will be added to the [`Exec` field of the `desktop` specification](http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html).
+
 #### options.icon
 Type: `String` or `Object[String:String]`
 Default: `undefined`
@@ -348,12 +354,6 @@ Or multiple images with their corresponding resolutions:
   }
 }
 ```
-
-#### options.execArguments
-Type: `Array[String]`
-Default: `[]`
-
-Command-line arguments to pass to the executable. Will be added to the `Exec` key in the `desktop` file.
 
 #### options.categories
 Type: `Array[String]`
