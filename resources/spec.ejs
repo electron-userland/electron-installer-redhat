@@ -12,6 +12,8 @@ AutoReqProv: no
 %description
 <%= productDescription %>
 <% } %>
+%define _binary_payload w<%= compressionLevel %>.xzdio
+
 %install
 mkdir -p %{buildroot}/usr/
 cp -r usr/* %{buildroot}/usr/

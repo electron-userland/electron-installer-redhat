@@ -121,6 +121,7 @@ var getDefaults = function (data, callback) {
         : pkg.author.url
       )),
 
+      compressionLevel: 2,
       bin: pkg.name || 'electron',
       icon: path.resolve(__dirname, '../resources/icon.png'),
 
