@@ -349,6 +349,12 @@ Or multiple images with their corresponding resolutions:
 }
 ```
 
+#### options.execArguments
+Type: `Array[String]`
+Default: `[]`
+
+Command-line arguments to pass to the executable. Will be added to the `Exec` key in the `desktop` file.
+
 #### options.categories
 Type: `Array[String]`
 Default: `[]`
