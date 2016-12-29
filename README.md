@@ -287,6 +287,12 @@ Default: `package.homepage || package.author.url`
 
 URL of the homepage for the package, used in the [`Homepage` field of the `control` specification](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
+#### options.compressionLevel
+Type: `Number`
+Default: `2`
+
+Package compression level, from `0` to `9`.
+
 #### options.bin
 Type: `String`
 Default: `package.name`
@@ -342,6 +348,12 @@ Or multiple images with their corresponding resolutions:
   }
 }
 ```
+
+#### options.execArguments
+Type: `Array[String]`
+Default: `[]`
+
+Command-line arguments to pass to the executable. Will be added to the `Exec` key in the `desktop` file.
 
 #### options.categories
 Type: `Array[String]`

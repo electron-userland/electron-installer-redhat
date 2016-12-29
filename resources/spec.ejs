@@ -12,9 +12,11 @@ AutoReqProv: no
 %description
 <%= productDescription %>
 <% } %>
+%define _binary_payload w<%= compressionLevel %>.xzdio
+
 %install
 mkdir -p %{buildroot}/usr/
-cp -r usr/* %{buildroot}/usr/
+<% if (process.platform != 'darwin') { %>cp -r usr/* %{buildroot}/usr/<% } else { %>cp -R usr/* %{buildroot}/usr/<% } %>
 
 %files
 /usr/bin/<%= name %>
