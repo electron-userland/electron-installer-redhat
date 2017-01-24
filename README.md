@@ -102,7 +102,7 @@ And point it to your built app:
 $ electron-installer-redhat --src dist/app-linux-x64/ --dest dist/installers/ --arch x86_64
 ```
 
-You'll end up with the package at `dist/installers/app_0.0.1_x86_64.rpm`.
+You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
 
 ### Scripts
 
@@ -138,7 +138,7 @@ And run the script:
 $ npm run rpm64
 ```
 
-You'll end up with the package at `dist/installers/app_0.0.1_x86_64.rpm`.
+You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
 
 ### Programmatically
 
@@ -171,7 +171,7 @@ installer(options, function (err) {
 })
 ```
 
-You'll end up with the package at `dist/installers/app_0.0.1_x86_64.rpm`.
+You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
 
 ### Options
 
