@@ -2,8 +2,9 @@
 
 var installer = require('..')
 
+var fs = require('fs-extra')
+var os = require('os')
 var path = require('path')
-var rimraf = require('rimraf')
 var access = require('./helpers/access')
 
 describe('module', function () {
@@ -28,7 +29,7 @@ describe('module', function () {
     })
 
     after(function (done) {
-      rimraf(dest, done)
+      fs.remove(dest, done)
     })
 
     it('generates a `.rpm` package', function (done) {
@@ -63,9 +64,37 @@ describe('module', function () {
         }
       }, done)
     })
+  })
+
+  describe('with an app without a homepage or author URL', function (test) {
+    var baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-without-homepage')
+    var dest = 'test/fixtures/out/baz/'
+
+    before(function (done) {
+      if (fs.existsSync(baseDir)) {
+        fs.removeSync(baseDir)
+      }
+      fs.copySync('test/fixtures/app-without-asar', baseDir)
+      var packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
+      var packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
+      packageJSON.author = 'Test Author'
+      fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
+      installer({
+        src: baseDir,
+        dest: dest,
+        rename: function (dest) {
+          return path.join(dest, '<%= name %>.<%= arch %>.rpm')
+        },
+
+        options: {
+          arch: 'x86_64'
+        }
+      }, done)
+    })
 
     after(function (done) {
-      rimraf(dest, done)
+      fs.removeSync(baseDir)
+      fs.remove(dest, done)
     })
 
     it('generates a `.rpm` package', function (done) {
