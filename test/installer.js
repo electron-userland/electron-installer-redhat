@@ -72,4 +72,41 @@ describe('module', function () {
       access(dest + 'bartest.x86_64.rpm', done)
     })
   })
+
+  describe('with an app having hyphen in version string', function (test) {
+    var dest = 'test/fixtures/out/baz/'
+
+    before(function (done) {
+      installer({
+        src: 'test/fixtures/invalid-version-string/',
+        dest: dest,
+        rename: function (dest) {
+          return path.join(dest, '<%= name %>.<%= arch %>.rpm')
+        },
+
+        options: {
+          icon: {
+            '1024x1024': 'test/fixtures/icon.png'
+          },
+          bin: 'resources/cli/baz.sh',
+          productDescription: 'Just a test.',
+          arch: 'x86_64',
+          categories: [
+            'Utility'
+          ],
+          mimeType: [
+            'text/plain'
+          ]
+        }
+      }, done)
+    })
+
+    after(function (done) {
+      rimraf(dest, done)
+    })
+
+    it('generates a `.rpm` package', function (done) {
+      access(dest + 'baztest.x86_64.rpm', done)
+    })
+  })
 })
