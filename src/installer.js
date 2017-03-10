@@ -384,6 +384,12 @@ module.exports = function (data, callback) {
     async.apply(getDefaults, data),
     async.apply(getOptions, data),
     function (options, callback) {
+      let adjustedVersion = options.version.replace(/-/, '.')
+      if (adjustedVersion !== options.version) {
+        data.logger('Warning: replacing disallowed characters in version to comply with SPEC format.' +
+            `Changing ${options.version} to ${adjustedVersion}`)
+        options.version = adjustedVersion
+      }
       data.logger('Creating package with options\n' + JSON.stringify(options, null, 2))
       async.waterfall([
         async.apply(createDir, options),
