@@ -102,40 +102,39 @@ describe('module', function () {
     })
   })
 
-  describe('with an app having hyphen in version string', function (test) {
+  describe('with an app having a hyphen in its version string', function (test) {
+    var baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-with-hyphen')
     var dest = 'test/fixtures/out/baz/'
 
     before(function (done) {
+      if (fs.existsSync(baseDir)) {
+        fs.removeSync(baseDir)
+      }
+      fs.copySync('test/fixtures/app-without-asar', baseDir)
+      var packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
+      var packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
+      packageJSON.version = '1.2.3-SNAPSHOT'
+      fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
       installer({
-        src: 'test/fixtures/invalid-version-string/',
+        src: baseDir,
         dest: dest,
         rename: function (dest) {
           return path.join(dest, '<%= name %>.<%= arch %>.rpm')
         },
 
         options: {
-          icon: {
-            '1024x1024': 'test/fixtures/icon.png'
-          },
-          bin: 'resources/cli/baz.sh',
-          productDescription: 'Just a test.',
-          arch: 'x86_64',
-          categories: [
-            'Utility'
-          ],
-          mimeType: [
-            'text/plain'
-          ]
+          arch: 'x86_64'
         }
       }, done)
     })
 
     after(function (done) {
-      rimraf(dest, done)
+      fs.removeSync(baseDir)
+      fs.remove(dest, done)
     })
 
     it('generates a `.rpm` package', function (done) {
-      access(dest + 'baztest.x86_64.rpm', done)
+      access(dest + 'bartest.x86_64.rpm', done)
     })
   })
 })
