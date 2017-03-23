@@ -102,7 +102,7 @@ describe('module', function () {
     })
   })
 
-  describe('with an app having a hyphen in its version string', function (test) {
+  describe('with an app having hyphens in its version string', function (test) {
     var baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-with-hyphen')
     var dest = 'test/fixtures/out/baz/'
 
@@ -113,7 +113,7 @@ describe('module', function () {
       fs.copySync('test/fixtures/app-without-asar', baseDir)
       var packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
       var packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
-      packageJSON.version = '1.2.3-SNAPSHOT'
+      packageJSON.version = '1.0.0-beta+internal-only.0'
       fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
       installer({
         src: baseDir,
