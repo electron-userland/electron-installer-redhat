@@ -11,6 +11,7 @@ var path = require('path')
 var temp = require('temp').track()
 var wrap = require('word-wrap')
 
+var util = require('./util.js')
 var pkg = require('../package.json')
 
 var defaultLogger = debug(pkg.name)
@@ -91,24 +92,6 @@ var readLicense = function (options, callback) {
 }
 
 /**
- * Determine the homepage based on the settings in `package.json`.
- */
-var getHomepage = function (pkg) {
-  if (pkg.homepage) {
-    return pkg.homepage
-  } else if (pkg.author) {
-    if (typeof pkg.author === 'string') {
-      var homepageRegexp = /.*\(([^)]+)\).*/
-      if (homepageRegexp.test(pkg.author)) {
-        return pkg.author.replace(homepageRegexp, '$1')
-      }
-    } else {
-      return pkg.author.url
-    }
-  }
-}
-
-/**
  * Get the hash of default options for the installer. Some come from the info
  * read from `package.json`, and some are hardcoded.
  */
@@ -134,7 +117,7 @@ var getDefaults = function (data, callback) {
         'lsb'
       ],
 
-      homepage: getHomepage(pkg),
+      homepage: util.getHomePage(pkg),
 
       compressionLevel: 2,
       bin: pkg.name || 'electron',
