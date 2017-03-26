@@ -1,6 +1,6 @@
 'use strict'
 
-var rimraf = require('rimraf')
+var fs = require('fs-extra')
 var access = require('./helpers/access')
 var spawn = require('./helpers/spawn')
 
@@ -19,7 +19,7 @@ describe('cli', function () {
     })
 
     after(function (done) {
-      rimraf(dest, done)
+      fs.remove(dest, done)
     })
 
     it('generates a `.rpm` package', function (done) {
@@ -39,7 +39,7 @@ describe('cli', function () {
     })
 
     after(function (done) {
-      rimraf(dest, done)
+      fs.remove(dest, done)
     })
 
     it('generates a `.rpm` package', function (done) {
