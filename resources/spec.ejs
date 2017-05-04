@@ -26,3 +26,9 @@ mkdir -p %{buildroot}/usr/
 <% if (_.isObject(icon)) { %><% _.forEach(icon, function (path, resolution) { %>/usr/share/icons/hicolor/<%= resolution %>/apps/<%= name %>.png
 <% }) } else { %>/usr/share/pixmaps/<%= name %>.png
 <% } %>
+
+%post
+update-desktop-database &> /dev/null
+
+%postun
+update-desktop-database &> /dev/null
