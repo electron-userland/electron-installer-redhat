@@ -114,7 +114,8 @@ var getDefaults = function (data, callback) {
       arch: undefined,
 
       requires: [
-        'lsb'
+        'lsb',
+        'libXScrnSaver'
       ],
 
       homepage: util.getHomePage(pkg),
