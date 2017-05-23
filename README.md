@@ -277,7 +277,7 @@ Machine architecture the package is targeted to, used to set the `--target` opti
 
 #### options.requires
 Type: `Array[String]`
-Default: `['lsb']`
+Default: `["lsb", "libXScrnSaver"]`
 
 Packages that are required when the program starts, used in the [`Requires` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
