@@ -191,7 +191,7 @@ var createSpec = function (options, dir, callback) {
  */
 var createBinary = function (options, dir, callback) {
   var binDir = path.join(dir, 'BUILD/usr/bin')
-  var binSrc = path.join('../share', options.name, options.bin)
+  var binSrc = path.join('../lib', options.name, options.bin)
   var binDest = path.join(binDir, options.name)
   options.logger('Symlinking binary from ' + binSrc + ' to ' + binDest)
 
@@ -277,7 +277,7 @@ var createCopyright = function (options, dir, callback) {
  * Copy the application into the package.
  */
 var createApplication = function (options, dir, callback) {
-  var applicationDir = path.join(dir, 'BUILD/usr/share', options.name)
+  var applicationDir = path.join(dir, 'BUILD/usr/lib', options.name)
   options.logger('Copying application to ' + applicationDir)
 
   async.waterfall([
