@@ -40,7 +40,7 @@
     "parse-author": "^2.0.0",
     "temp": "^0.8.3",
     "word-wrap": "^1.2.1",
-    "yargs": "7.0.2"
+    "yargs": "8.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
