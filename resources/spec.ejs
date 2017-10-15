@@ -20,7 +20,7 @@ mkdir -p %{buildroot}/usr/
 
 %files
 /usr/bin/<%= name %>
-/usr/share/<%= name %>/
+/usr/lib/<%= name %>/
 /usr/share/applications/<%= name %>.desktop
 /usr/share/doc/<%= name %>/
 <% if (_.isObject(icon)) { %><% _.forEach(icon, function (path, resolution) { %>/usr/share/icons/hicolor/<%= resolution %>/apps/<%= name %>.png
