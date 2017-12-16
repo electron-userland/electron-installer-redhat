@@ -7,7 +7,7 @@
 
 ## Requirements
 
-This tool requires `rpmbuild` to build the `.rpm` package. On Fedora you can do something like this:
+This tool requires Node 4 or greater and `rpmbuild` to build the `.rpm` package. On Fedora you can do something like this:
 
 ```
 $ sudo dnf install rpm-build
