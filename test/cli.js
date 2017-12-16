@@ -1,14 +1,14 @@
 'use strict'
 
-var fs = require('fs-extra')
-var access = require('./helpers/access')
-var spawn = require('./helpers/spawn')
+const fs = require('fs-extra')
+const access = require('./helpers/access')
+const spawn = require('./helpers/spawn')
 
 describe('cli', function () {
   this.timeout(10000)
 
   describe('with an app with asar', function (test) {
-    var dest = 'test/fixtures/out/foo/'
+    const dest = 'test/fixtures/out/foo/'
 
     before(function (done) {
       spawn('./src/cli.js', [
@@ -28,7 +28,7 @@ describe('cli', function () {
   })
 
   describe('with an app without asar', function (test) {
-    var dest = 'test/fixtures/out/bar/'
+    const dest = 'test/fixtures/out/bar/'
 
     before(function (done) {
       spawn('node src/cli.js', [

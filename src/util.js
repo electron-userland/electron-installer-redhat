@@ -1,9 +1,10 @@
+'use strict'
 /**
  * Determine the homepage based on the settings in `package.json`.
  */
 function getHomePage (pkg) {
-  var parseAuthor = require('parse-author')
-  var homepage = ''
+  const parseAuthor = require('parse-author')
+  let homepage = ''
 
   if (pkg.homepage) {
     homepage = pkg.homepage

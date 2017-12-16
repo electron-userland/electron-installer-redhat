@@ -1,5 +1,5 @@
-var expect = require('chai').expect
-var util = require('../src/util.js')
+const expect = require('chai').expect
+const util = require('../src/util.js')
 
 describe('private utility functions', function () {
   this.timeout(10000)
