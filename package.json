@@ -20,6 +20,9 @@
     "darwin",
     "linux"
   ],
+  "engines": {
+    "node": ">= 4.0.0"
+  },
   "main": "src/installer.js",
   "bin": {
     "electron-installer-redhat": "src/cli.js"
@@ -35,7 +38,6 @@
     "async": "^2.6.0",
     "debug": "^3.1.0",
     "fs-extra": "^4.0.3",
-    "g": "^2.0.1",
     "glob": "^7.1.2",
     "lodash": "^4.17.4",
     "parse-author": "^2.0.0",
