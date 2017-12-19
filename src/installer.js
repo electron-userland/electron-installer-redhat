@@ -1,32 +1,32 @@
 'use strict'
 
-var _ = require('lodash')
-var asar = require('asar')
-var async = require('async')
-var child = require('child_process')
-var debug = require('debug')
-var fs = require('fs-extra')
-var glob = require('glob')
-var path = require('path')
-var temp = require('temp').track()
-var wrap = require('word-wrap')
+const _ = require('lodash')
+const asar = require('asar')
+const async = require('async')
+const child = require('child_process')
+const debug = require('debug')
+const fs = require('fs-extra')
+const glob = require('glob')
+const path = require('path')
+const temp = require('temp').track()
+const wrap = require('word-wrap')
 
-var util = require('./util.js')
-var pkg = require('../package.json')
+const util = require('./util.js')
+const pkg = require('../package.json')
 
-var defaultLogger = debug(pkg.name)
+const defaultLogger = debug(pkg.name)
 
-var defaultRename = function (dest, src) {
+const defaultRename = function (dest, src) {
   return path.join(dest, '<%= name %>-<%= version %>.<%= arch %>.rpm')
 }
 
 /**
  * Spawn a child process.
  */
-var spawn = function (options, command, args, callback) {
-  var spawnedProcess = null
-  var error = null
-  var stderr = ''
+const spawn = function (options, command, args, callback) {
+  let spawnedProcess = null
+  let error = null
+  let stderr = ''
 
   options.logger('Executing command ' + command + ' ' + args.join(' '))
 
@@ -61,9 +61,9 @@ var spawn = function (options, command, args, callback) {
  * Read `package.json` either from `resources.app.asar` (if the app is packaged)
  * or from `resources/app/package.json` (if it is not).
  */
-var readMeta = function (options, callback) {
-  var withAsar = path.join(options.src, 'resources/app.asar')
-  var withoutAsar = path.join(options.src, 'resources/app/package.json')
+const readMeta = function (options, callback) {
+  const withAsar = path.join(options.src, 'resources/app.asar')
+  const withoutAsar = path.join(options.src, 'resources/app/package.json')
 
   try {
     fs.accessSync(withAsar)
@@ -84,8 +84,8 @@ var readMeta = function (options, callback) {
 /**
  * Read `LICENSE` from the root of the app.
  */
-var readLicense = function (options, callback) {
-  var licenseSrc = path.join(options.src, 'LICENSE')
+const readLicense = function (options, callback) {
+  const licenseSrc = path.join(options.src, 'LICENSE')
   options.logger('Reading license file from ' + licenseSrc)
 
   fs.readFile(licenseSrc, callback)
@@ -95,11 +95,11 @@ var readLicense = function (options, callback) {
  * Get the hash of default options for the installer. Some come from the info
  * read from `package.json`, and some are hardcoded.
  */
-var getDefaults = function (data, callback) {
+const getDefaults = function (data, callback) {
   readMeta(data, function (err, pkg) {
     pkg = pkg || {}
 
-    var defaults = {
+    const defaults = {
       name: pkg.name || 'electron',
       productName: pkg.productName || pkg.name,
       genericName: pkg.genericName || pkg.productName || pkg.name,
@@ -141,9 +141,9 @@ var getDefaults = function (data, callback) {
 /**
  * Get the hash of options for the installer.
  */
-var getOptions = function (data, defaults, callback) {
+const getOptions = function (data, defaults, callback) {
   // Flatten everything for ease of use.
-  var options = _.defaults({}, data, data.options, defaults)
+  const options = _.defaults({}, data, data.options, defaults)
 
   // Wrap the extended description to avoid rpmlint warning about
   // `description-line-too-long`.
@@ -155,13 +155,13 @@ var getOptions = function (data, defaults, callback) {
 /**
  * Fill in a template with the hash of options.
  */
-var generateTemplate = function (options, file, callback) {
+const generateTemplate = function (options, file, callback) {
   options.logger('Generating template from ' + file)
 
   async.waterfall([
     async.apply(fs.readFile, file),
     function (template, callback) {
-      var result = _.template(template)(options)
+      const result = _.template(template)(options)
       options.logger('Generated template from ' + file + '\n' + result)
       callback(null, result)
     }
@@ -173,9 +173,9 @@ var generateTemplate = function (options, file, callback) {
  *
  * See: https://fedoraproject.org/wiki/How_to_create_an_RPM_package
  */
-var createSpec = function (options, dir, callback) {
-  var specSrc = path.resolve(__dirname, '../resources/spec.ejs')
-  var specDest = path.join(dir, 'SPECS', options.name + '.spec')
+const createSpec = function (options, dir, callback) {
+  const specSrc = path.resolve(__dirname, '../resources/spec.ejs')
+  const specDest = path.join(dir, 'SPECS', options.name + '.spec')
   options.logger('Creating spec file at ' + specDest)
 
   async.waterfall([
@@ -189,10 +189,10 @@ var createSpec = function (options, dir, callback) {
 /**
  * Create the binary for the package.
  */
-var createBinary = function (options, dir, callback) {
-  var binDir = path.join(dir, 'BUILD/usr/bin')
-  var binSrc = path.join('../lib', options.name, options.bin)
-  var binDest = path.join(binDir, options.name)
+const createBinary = function (options, dir, callback) {
+  const binDir = path.join(dir, 'BUILD/usr/bin')
+  const binSrc = path.join('../lib', options.name, options.bin)
+  const binDest = path.join(binDir, options.name)
   options.logger('Symlinking binary from ' + binSrc + ' to ' + binDest)
 
   async.waterfall([
@@ -208,9 +208,9 @@ var createBinary = function (options, dir, callback) {
  *
  * See: http://standards.freedesktop.org/desktop-entry-spec/latest/
  */
-var createDesktop = function (options, dir, callback) {
-  var desktopSrc = path.resolve(__dirname, '../resources/desktop.ejs')
-  var desktopDest = path.join(dir, 'BUILD/usr/share/applications', options.name + '.desktop')
+const createDesktop = function (options, dir, callback) {
+  const desktopSrc = path.resolve(__dirname, '../resources/desktop.ejs')
+  const desktopDest = path.join(dir, 'BUILD/usr/share/applications', options.name + '.desktop')
   options.logger('Creating desktop file at ' + desktopDest)
 
   async.waterfall([
@@ -224,8 +224,8 @@ var createDesktop = function (options, dir, callback) {
 /**
  * Create pixmap icon for the package.
  */
-var createPixmapIcon = function (options, dir, callback) {
-  var iconFile = path.join(dir, 'BUILD/usr/share/pixmaps', options.name + '.png')
+const createPixmapIcon = function (options, dir, callback) {
+  const iconFile = path.join(dir, 'BUILD/usr/share/pixmaps', options.name + '.png')
   options.logger('Creating icon file at ' + iconFile)
 
   fs.copy(options.icon, iconFile, function (err) {
@@ -236,9 +236,9 @@ var createPixmapIcon = function (options, dir, callback) {
 /**
  * Create hicolor icon for the package.
  */
-var createHicolorIcon = function (options, dir, callback) {
+const createHicolorIcon = function (options, dir, callback) {
   async.forEachOf(options.icon, function (icon, resolution, callback) {
-    var iconFile = path.join(dir, 'BUILD/usr/share/icons/hicolor', resolution, 'apps', options.name + '.png')
+    const iconFile = path.join(dir, 'BUILD/usr/share/icons/hicolor', resolution, 'apps', options.name + '.png')
     options.logger('Creating icon file at ' + iconFile)
 
     fs.copy(icon, iconFile, callback)
@@ -250,7 +250,7 @@ var createHicolorIcon = function (options, dir, callback) {
 /**
  * Create icon for the package.
  */
-var createIcon = function (options, dir, callback) {
+const createIcon = function (options, dir, callback) {
   if (_.isObject(options.icon)) {
     createHicolorIcon(options, dir, callback)
   } else {
@@ -261,8 +261,8 @@ var createIcon = function (options, dir, callback) {
 /**
  * Create copyright for the package.
  */
-var createCopyright = function (options, dir, callback) {
-  var copyrightFile = path.join(dir, 'BUILD/usr/share/doc', options.name, 'copyright')
+const createCopyright = function (options, dir, callback) {
+  const copyrightFile = path.join(dir, 'BUILD/usr/share/doc', options.name, 'copyright')
   options.logger('Creating copyright file at ' + copyrightFile)
 
   async.waterfall([
@@ -276,8 +276,8 @@ var createCopyright = function (options, dir, callback) {
 /**
  * Copy the application into the package.
  */
-var createApplication = function (options, dir, callback) {
-  var applicationDir = path.join(dir, 'BUILD/usr/lib', options.name)
+const createApplication = function (options, dir, callback) {
+  const applicationDir = path.join(dir, 'BUILD/usr/lib', options.name)
   options.logger('Copying application to ' + applicationDir)
 
   async.waterfall([
@@ -291,7 +291,7 @@ var createApplication = function (options, dir, callback) {
 /**
  * Create temporary directory where the contents of the package will live.
  */
-var createDir = function (options, callback) {
+const createDir = function (options, callback) {
   options.logger('Creating temporary directory')
 
   async.waterfall([
@@ -308,9 +308,9 @@ var createDir = function (options, callback) {
 /**
  * Create macros file used by `rpmbuild`.
  */
-var createMacros = function (options, dir, callback) {
-  var macrosSrc = path.resolve(__dirname, '../resources/macros.ejs')
-  var macrosDest = path.join(process.env.HOME, '.rpmmacros')
+const createMacros = function (options, dir, callback) {
+  const macrosSrc = path.resolve(__dirname, '../resources/macros.ejs')
+  const macrosDest = path.join(process.env.HOME, '.rpmmacros')
   options.logger('Creating macros file at ' + macrosDest)
 
   async.waterfall([
@@ -324,7 +324,7 @@ var createMacros = function (options, dir, callback) {
 /**
  * Create the contents of the package.
  */
-var createContents = function (options, dir, callback) {
+const createContents = function (options, dir, callback) {
   options.logger('Creating contents of package')
 
   async.parallel([
@@ -342,10 +342,10 @@ var createContents = function (options, dir, callback) {
 /**
  * Package everything using `rpmbuild`.
  */
-var createPackage = function (options, dir, callback) {
+const createPackage = function (options, dir, callback) {
   options.logger('Creating package at ' + dir)
 
-  var specFile = path.join(dir, 'SPECS', options.name + '.spec')
+  const specFile = path.join(dir, 'SPECS', options.name + '.spec')
   spawn(options, 'rpmbuild', ['-bb', specFile, '--target', options.arch], function (err) {
     callback(err, dir)
   })
@@ -354,15 +354,15 @@ var createPackage = function (options, dir, callback) {
 /**
  * Move the package to the specified destination.
  */
-var movePackage = function (options, dir, callback) {
+const movePackage = function (options, dir, callback) {
   options.logger('Moving package to destination')
 
-  var packagePattern = path.join(dir, 'RPMS', options.arch, '*.rpm')
+  const packagePattern = path.join(dir, 'RPMS', options.arch, '*.rpm')
   async.waterfall([
     async.apply(glob, packagePattern),
     function (files, callback) {
       async.each(files, function (file) {
-        var dest = options.rename(options.dest, path.basename(file))
+        let dest = options.rename(options.dest, path.basename(file))
         dest = _.template(dest)(options)
         options.logger('Moving file ' + file + ' to ' + dest)
         fs.move(file, dest, {clobber: true}, callback)

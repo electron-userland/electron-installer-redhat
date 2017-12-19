@@ -1,17 +1,17 @@
 'use strict'
 
-var installer = require('..')
+const installer = require('..')
 
-var fs = require('fs-extra')
-var os = require('os')
-var path = require('path')
-var access = require('./helpers/access')
+const fs = require('fs-extra')
+const os = require('os')
+const path = require('path')
+const access = require('./helpers/access')
 
 describe('module', function () {
   this.timeout(10000)
 
   describe('with an app with asar', function (test) {
-    var dest = 'test/fixtures/out/foo/'
+    const dest = 'test/fixtures/out/foo/'
 
     before(function (done) {
       installer({
@@ -38,7 +38,7 @@ describe('module', function () {
   })
 
   describe('with an app without asar', function (test) {
-    var dest = 'test/fixtures/out/bar/'
+    const dest = 'test/fixtures/out/bar/'
 
     before(function (done) {
       installer({
@@ -67,16 +67,16 @@ describe('module', function () {
   })
 
   describe('with an app without a homepage or author URL', function (test) {
-    var baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-without-homepage')
-    var dest = 'test/fixtures/out/baz/'
+    const baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-without-homepage')
+    const dest = 'test/fixtures/out/baz/'
 
     before(function (done) {
       if (fs.existsSync(baseDir)) {
         fs.removeSync(baseDir)
       }
       fs.copySync('test/fixtures/app-without-asar', baseDir)
-      var packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
-      var packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
+      const packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
+      const packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
       packageJSON.author = 'Test Author'
       fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
       installer({
@@ -103,16 +103,16 @@ describe('module', function () {
   })
 
   describe('with an app having hyphens in its version string', function (test) {
-    var baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-with-hyphen')
-    var dest = 'test/fixtures/out/baz/'
+    const baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-with-hyphen')
+    const dest = 'test/fixtures/out/baz/'
 
     before(function (done) {
       if (fs.existsSync(baseDir)) {
         fs.removeSync(baseDir)
       }
       fs.copySync('test/fixtures/app-without-asar', baseDir)
-      var packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
-      var packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
+      const packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
+      const packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
       packageJSON.version = '1.0.0-beta+internal-only.0'
       fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
       installer({
