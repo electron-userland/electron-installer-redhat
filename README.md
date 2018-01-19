@@ -18,7 +18,7 @@ While on Ubuntu you'll need to do this instead:
 ```
 $ sudo apt-get install rpm
 ```
-
+In order to use [boolean dependencies](http://rpm.org/user_doc/boolean_dependencies.html),`rpm >= 4.13` is required.
 
 ## Installation
 
@@ -280,7 +280,6 @@ Type: `Array[String]`
 Default: `["lsb", "libXScrnSaver"]`
 
 Packages that are required when the program starts, used in the [`Requires` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
-In order to use [boolean dependencies](http://rpm.org/user_doc/boolean_dependencies.html) you need `rpm >= 4.13`
 
 #### options.homepage
 Type: `String`
