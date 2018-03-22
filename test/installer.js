@@ -1,140 +1,116 @@
 'use strict'
 
+const fs = require('fs-extra')
+const path = require('path')
+
 const installer = require('..')
 
-const fs = require('fs-extra')
-const os = require('os')
-const path = require('path')
 const access = require('./helpers/access')
+const describeInstaller = require('./helpers/describe_installer')
+const tempOutputDir = describeInstaller.tempOutputDir
+const testInstallerOptions = describeInstaller.testInstallerOptions
+
+const assertASARRpmExists = outputDir =>
+  access(path.join(outputDir, 'footest.x86.rpm'))
+
+const assertNonASARRpmExists = outputDir =>
+  access(path.join(outputDir, 'bartest.x86_64.rpm'))
 
 describe('module', function () {
   this.timeout(10000)
 
-  describe('with an app with asar', function (test) {
-    const dest = 'test/fixtures/out/foo/'
-
-    before(function (done) {
-      installer({
-        src: 'test/fixtures/app-with-asar/',
-        dest: dest,
-        rename: function (dest) {
-          return path.join(dest, '<%= name %>.<%= arch %>.rpm')
-        },
-
-        options: {
-          productDescription: 'Just a test.',
-          arch: 'x86'
-        }
-      }, done)
-    })
-
-    after(function (done) {
-      fs.remove(dest, done)
-    })
-
-    it('generates a `.rpm` package', function (done) {
-      access(dest + 'footest.x86.rpm', done)
-    })
-  })
-
-  describe('with an app without asar', function (test) {
-    const dest = 'test/fixtures/out/bar/'
-
-    before(function (done) {
-      installer({
-        src: 'test/fixtures/app-without-asar/',
-        dest: dest,
-        rename: function (dest) {
-          return path.join(dest, '<%= name %>.<%= arch %>.rpm')
-        },
-
-        options: {
-          icon: {
-            '1024x1024': 'test/fixtures/icon.png'
-          },
-          bin: 'resources/cli/bar.sh',
-          productDescription: 'Just a test.',
-          arch: 'x86_64',
-          categories: [
-            'Utility'
-          ],
-          mimeType: [
-            'text/plain'
-          ]
-        }
-      }, done)
-    })
-  })
-
-  describe('with an app without a homepage or author URL', function (test) {
-    const baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-without-homepage')
-    const dest = 'test/fixtures/out/baz/'
-
-    before(function (done) {
-      if (fs.existsSync(baseDir)) {
-        fs.removeSync(baseDir)
+  describeInstaller(
+    'with an app with asar',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        productDescription: 'Just a test.',
+        arch: 'x86'
       }
-      fs.copySync('test/fixtures/app-without-asar', baseDir)
-      const packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
-      const packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
-      packageJSON.author = 'Test Author'
-      fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
-      installer({
-        src: baseDir,
-        dest: dest,
-        rename: function (dest) {
-          return path.join(dest, '<%= name %>.<%= arch %>.rpm')
-        },
+    },
+    'generates a `.rpm` package',
+    assertASARRpmExists
+  )
 
-        options: {
-          arch: 'x86_64'
-        }
-      }, done)
+  describeInstaller(
+    'with an app without asar',
+    {
+      src: 'test/fixtures/app-without-asar/',
+      icon: {
+        '1024x1024': 'test/fixtures/icon.png'
+      },
+      bin: 'resources/cli/bar.sh',
+      productDescription: 'Just a test.',
+      categories: [
+        'Utility'
+      ],
+      mimeType: [
+        'text/plain'
+      ]
+    },
+    'generates a `.rpm` package',
+    assertNonASARRpmExists
+  )
+
+  describe('with an app without a homepage or author URL', (test) => {
+    const baseDir = tempOutputDir('app-without-homepage')
+    let outputDir
+
+    after(() => fs.remove(baseDir))
+    after(() => fs.remove(outputDir))
+
+    before(() => {
+      let pkgJSONFilename
+      return fs.emptyDir(baseDir)
+        .then(() => fs.copy('test/fixtures/app-without-asar', baseDir))
+        .then(() => {
+          pkgJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
+          return pkgJSONFilename
+        })
+        .then(file => fs.readJson(file))
+        .then((pkgJSON) => {
+          pkgJSON.author = 'Test Author'
+          return fs.writeJson(pkgJSONFilename, pkgJSON)
+        })
+        .then(() => tempOutputDir())
+        .then(tmpdir => {
+          outputDir = tmpdir
+          return testInstallerOptions(outputDir, { src: baseDir })
+        })
+        .then(options => installer(options))
     })
 
-    after(function (done) {
-      fs.removeSync(baseDir)
-      fs.remove(dest, done)
-    })
-
-    it('generates a `.rpm` package', function (done) {
-      access(dest + 'bartest.x86_64.rpm', done)
-    })
+    it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
   })
 
-  describe('with an app having hyphens in its version string', function (test) {
-    const baseDir = path.join(os.tmpdir(), 'electron-installer-redhat', 'app-with-hyphen')
-    const dest = 'test/fixtures/out/baz/'
+  describe('with an app having hyphens in its version string', (test) => {
+    const baseDir = tempOutputDir('app-with-hyphen')
+    let outputDir
 
-    before(function (done) {
-      if (fs.existsSync(baseDir)) {
-        fs.removeSync(baseDir)
-      }
-      fs.copySync('test/fixtures/app-without-asar', baseDir)
-      const packageJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
-      const packageJSON = JSON.parse(fs.readFileSync(packageJSONFilename))
-      packageJSON.version = '1.0.0-beta+internal-only.0'
-      fs.writeFileSync(packageJSONFilename, JSON.stringify(packageJSON))
-      installer({
-        src: baseDir,
-        dest: dest,
-        rename: function (dest) {
-          return path.join(dest, '<%= name %>.<%= arch %>.rpm')
-        },
+    after(() => fs.remove(baseDir))
+    after(() => fs.remove(outputDir))
 
-        options: {
-          arch: 'x86_64'
-        }
-      }, done)
+    before(() => {
+      let pkgJSONFilename
+      return fs.emptyDir(baseDir)
+        .then(() => fs.copy('test/fixtures/app-without-asar', baseDir))
+        .then(() => {
+          pkgJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
+          return pkgJSONFilename
+        })
+        .then(file => fs.readJson(file))
+        .then((pkgJSON) => {
+          pkgJSON.version = '1.0.0-beta+internal-only.0'
+          return fs.writeJson(pkgJSONFilename, pkgJSON)
+        })
+        .then(() => tempOutputDir())
+        .then(tmpdir => {
+          outputDir = tmpdir
+          return testInstallerOptions(outputDir, { src: baseDir })
+        })
+        .then(options => installer(options))
     })
 
-    after(function (done) {
-      fs.removeSync(baseDir)
-      fs.remove(dest, done)
-    })
-
-    it('generates a `.rpm` package', function (done) {
-      access(dest + 'bartest.x86_64.rpm', done)
-    })
+    it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
   })
 })
