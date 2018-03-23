@@ -18,7 +18,7 @@ While on Ubuntu you'll need to do this instead:
 ```
 $ sudo apt-get install rpm
 ```
-
+In order to use [boolean dependencies](http://rpm.org/user_doc/boolean_dependencies.html),`rpm >= 4.13` is required.
 
 ## Installation
 
