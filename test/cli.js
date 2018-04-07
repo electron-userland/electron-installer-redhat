@@ -1,49 +1,46 @@
 'use strict'
 
 const fs = require('fs-extra')
+const path = require('path')
+
 const access = require('./helpers/access')
-const spawn = require('./helpers/spawn')
+const describeInstaller = require('./helpers/describe_installer')
+const spawn = require('../src/spawn')
+
+const tempOutputDir = describeInstaller.tempOutputDir
+const cleanupOutputDir = describeInstaller.cleanupOutputDir
+
+function runCLI (options) {
+  const args = [
+    '--src', options.src,
+    '--dest', options.dest,
+    '--arch', options.arch
+  ]
+  if (options.config) args.push('--config', options.config)
+
+  before(() => spawn('./src/cli.js', args))
+}
 
 describe('cli', function () {
   this.timeout(10000)
 
-  describe('with an app with asar', function (test) {
-    const dest = 'test/fixtures/out/foo/'
+  describe('with an app with asar', test => {
+    const outputDir = tempOutputDir()
 
-    before(function (done) {
-      spawn('./src/cli.js', [
-        '--src', 'test/fixtures/app-with-asar/',
-        '--dest', dest,
-        '--arch', 'x86'
-      ], done)
-    })
+    runCLI({ src: 'test/fixtures/app-with-asar/', dest: outputDir, arch: 'x86' })
 
-    after(function (done) {
-      fs.remove(dest, done)
-    })
+    it('generates a `.rpm` package', () => access(path.join(outputDir, 'footest-0.0.1.x86.rpm')))
 
-    it('generates a `.rpm` package', function (done) {
-      access(dest + 'footest-0.0.1.x86.rpm', done)
-    })
+    cleanupOutputDir(outputDir)
   })
 
-  describe('with an app without asar', function (test) {
-    const dest = 'test/fixtures/out/bar/'
+  describe('with an app without asar', test => {
+    const outputDir = tempOutputDir()
 
-    before(function (done) {
-      spawn('node src/cli.js', [
-        '--src', 'test/fixtures/app-without-asar/',
-        '--dest', dest,
-        '--arch', 'x86_64'
-      ], done)
-    })
+    runCLI({ src: 'test/fixtures/app-without-asar/', dest: outputDir, arch: 'x86_64' })
 
-    after(function (done) {
-      fs.remove(dest, done)
-    })
+    it('generates a `.rpm` package', () => access(path.join(outputDir, 'bartest-0.0.1.x86_64.rpm')))
 
-    it('generates a `.rpm` package', function (done) {
-      access(dest + 'bartest-0.0.1.x86_64.rpm', done)
-    })
+    after(() => fs.remove(outputDir))
   })
 })
