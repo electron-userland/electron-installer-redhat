@@ -4,7 +4,7 @@ const util = require('../src/util.js')
 describe('private utility functions', function () {
   this.timeout(10000)
 
-  describe('getHomepage', (test) => {
+  describe('getHomepage', test => {
     [{
       name: 'Return empty string if none available',
       pkg: {},
@@ -30,7 +30,7 @@ describe('private utility functions', function () {
         }
       },
       expectedHomepage: 'http://www.example.com/author-object-url'
-    }].forEach((scenario) => {
+    }].forEach(scenario => {
       it(scenario.name, () => {
         expect(util.getHomePage(scenario.pkg)).to.equal(scenario.expectedHomepage)
       })
@@ -53,7 +53,7 @@ describe('private utility functions', function () {
     }, {
       input: undefined,
       expectedOutput: ''
-    }].forEach((scenario) => {
+    }].forEach(scenario => {
       it(`${JSON.stringify(scenario.input)} -> ${JSON.stringify(scenario.expectedOutput)}`, () => {
         expect(util.replaceInvalidVersionCharacters(scenario.input)).to.equal(scenario.expectedOutput)
       })

@@ -52,7 +52,7 @@ describe('module', function () {
     assertNonASARRpmExists
   )
 
-  describe('with an app without a homepage or author URL', (test) => {
+  describe('with an app without a homepage or author URL', test => {
     const baseDir = tempOutputDir('app-without-homepage')
     let outputDir
 
@@ -68,7 +68,7 @@ describe('module', function () {
           return pkgJSONFilename
         })
         .then(file => fs.readJson(file))
-        .then((pkgJSON) => {
+        .then(pkgJSON => {
           pkgJSON.author = 'Test Author'
           return fs.writeJson(pkgJSONFilename, pkgJSON)
         })
@@ -83,7 +83,7 @@ describe('module', function () {
     it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
   })
 
-  describe('with an app having hyphens in its version string', (test) => {
+  describe('with an app having hyphens in its version string', test => {
     const baseDir = tempOutputDir('app-with-hyphen')
     let outputDir
 
@@ -99,7 +99,7 @@ describe('module', function () {
           return pkgJSONFilename
         })
         .then(file => fs.readJson(file))
-        .then((pkgJSON) => {
+        .then(pkgJSON => {
           pkgJSON.version = '1.0.0-beta+internal-only.0'
           return fs.writeJson(pkgJSONFilename, pkgJSON)
         })

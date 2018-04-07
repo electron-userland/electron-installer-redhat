@@ -38,8 +38,8 @@ const readMeta = function (options) {
   const withoutAsar = path.join(options.src, 'resources/app/package.json')
 
   return fs.pathExists(withAsar)
-    .then((assarExists) => {
-      if (assarExists) {
+    .then(asarExists => {
+      if (asarExists) {
         options.logger(`Reading package metadata from ${withAsar}`)
         return JSON.parse(asar.extractFile(withAsar, 'package.json'))
       } else {
@@ -65,7 +65,7 @@ const readLicense = function (options) {
  */
 const getDefaults = function (data) {
   return readMeta(data)
-    .then((pkg) => {
+    .then(pkg => {
       pkg = pkg || {}
 
       return {
@@ -126,7 +126,7 @@ const generateTemplate = function (options, file) {
   options.logger(`Generating template from ${file}`)
 
   return fs.readFile(file)
-    .then((template) => {
+    .then(template => {
       const result = _.template(template)(options)
       options.logger(`Generated template from ${file} \n${result}`)
       return result
@@ -244,7 +244,7 @@ const createDir = function (options) {
   let tmpDir
 
   return tmp.dir({prefix: 'electron-', unsafeCleanup: true})
-    .then((dir) => {
+    .then(dir => {
       options.logger(`DIR: ${dir}`)
       tmpDir = path.join(dir.path, `${options.name}_${options.version}_${options.arch}`)
       options.logger(`DIR: ${tmpDir}`)
@@ -295,7 +295,7 @@ const createPackage = function (options, dir) {
   const specFile = path.join(dir, 'SPECS', options.name + '.spec')
 
   return spawn('rpmbuild', ['-bb', specFile, '--target', options.arch], options.logger)
-    .then((output) => {
+    .then(output => {
       options.logger(`rpmbuild output: ${output}`)
       return dir
     })
@@ -310,7 +310,7 @@ const movePackage = function (options, dir) {
   const packagePattern = path.join(dir, 'RPMS', options.arch, '*.rpm')
 
   return glob(packagePattern)
-    .then(files => Promise.all(files.map((file) => {
+    .then(files => Promise.all(files.map(file => {
       const template = options.rename(options.dest, path.basename(file))
       const dest = _.template(template)(options)
       options.logger(`Moving file ${file} to ${dest}`)
@@ -329,7 +329,7 @@ module.exports = function (data, callback) {
 
   const promise = getDefaults(data)
     .then(defaults => getOptions(data, defaults))
-    .then((generatedOptions) => {
+    .then(generatedOptions => {
       options = generatedOptions
       const adjustedVersion = util.replaceInvalidVersionCharacters(options.version)
       if (adjustedVersion !== options.version) {
@@ -347,7 +347,7 @@ module.exports = function (data, callback) {
     .then(() => {
       data.logger(`Successfully created package at ${options.dest}`)
       return options
-    }).catch((err) => {
+    }).catch(err => {
       data.logger(errorMessage('creating package', err))
       throw err
     })

@@ -24,7 +24,7 @@ function runCLI (options) {
 describe('cli', function () {
   this.timeout(10000)
 
-  describe('with an app with asar', (test) => {
+  describe('with an app with asar', test => {
     const outputDir = tempOutputDir()
 
     runCLI({ src: 'test/fixtures/app-with-asar/', dest: outputDir, arch: 'x86' })
@@ -34,7 +34,7 @@ describe('cli', function () {
     cleanupOutputDir(outputDir)
   })
 
-  describe('with an app without asar', (test) => {
+  describe('with an app without asar', test => {
     const outputDir = tempOutputDir()
 
     runCLI({ src: 'test/fixtures/app-without-asar/', dest: outputDir, arch: 'x86_64' })
