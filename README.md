@@ -369,6 +369,24 @@ Default: `[]`
 
 MIME types the application is able to open, used in the [`MimeType` field of the `desktop` specification](http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html).
 
+#### options.scripts
+Type: `Object[String:String]`
+Default: `undefined`
+
+Path to installation scripts with their corresponding name. The files contents will be added to the spec file.
+
+```javascript
+{
+  scripts: {
+    'pre': 'resources/pre_script',
+    'post': 'resources/post_script',
+    'preun': 'resources/preun_script',
+    'postun': 'resources/postun_script'
+  }
+}
+```
+You can read more about [scriptlets](https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/)
+
 ## Meta
 
 * Code: `git clone git://github.com/unindented/electron-installer-redhat.git`
