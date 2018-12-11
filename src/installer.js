@@ -100,9 +100,29 @@ const getDefaults = function (data) {
           'Utility'
         ],
 
+        pre: undefined,
+        post: undefined,
+        preun: undefined,
+        postun: undefined,
+
         mimeType: []
       }
     })
+}
+
+/**
+ * Read scripts from provided filename and add them to the options
+ */
+const generateScripts = function (options) {
+  const scriptNames = ['pre', 'post', 'preun', 'postun']
+
+  return Promise.all(_.map(options.scripts, (item, key) => {
+    if (_.includes(scriptNames, key)) {
+      options.logger(`Creating installation script ${key}`)
+      return fs.readFile(item)
+        .then(script => (options[key] = script.toString()))
+    }
+  })).then(() => options)
 }
 
 /**
@@ -116,7 +136,8 @@ const getOptions = function (data, defaults) {
   // `description-line-too-long`.
   options.productDescription = wrap(options.productDescription, {width: 100, indent: ''})
 
-  return options
+  // Scan if there are any installation scripts and adds them to the options
+  return generateScripts(options)
 }
 
 /**
