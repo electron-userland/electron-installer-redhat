@@ -5,7 +5,7 @@ const path = require('path')
 
 const installer = require('..')
 
-const { exec } = require('mz/child_process')
+const exec = require('mz/child_process').exec
 const access = require('./helpers/access')
 const describeInstaller = require('./helpers/describe_installer')
 const tempOutputDir = describeInstaller.tempOutputDir
