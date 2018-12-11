@@ -117,6 +117,7 @@ const generateScripts = function (options) {
   const scriptNames = ['pre', 'post', 'preun', 'postun']
 
   return Promise.all(_.map(options.scripts, (item, key) => {
+    // TODO: Replace lodash with Array.prototype.includes
     if (_.includes(scriptNames, key)) {
       options.logger(`Creating installation script ${key}`)
       return fs.readFile(item)
