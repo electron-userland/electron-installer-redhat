@@ -369,14 +369,14 @@ Default: `[]`
 
 MIME types the application is able to open, used in the [`MimeType` field of the `desktop` specification](http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html).
 
-If this option is specified, make sure to run `update-desktop-database &> /dev/null` as part of the `post` and `postun` scripts to refresh the cache database of MIME types.
-You can read more about refreshing the [MIME-type/application cache](https://fedoraproject.org/wiki/NewMIMESystem).
+If this option is specified, make sure to run `update-desktop-database &> /dev/null` as part of the `post` and `postun` scripts to refresh the [cached database of MIME types](https://fedoraproject.org/wiki/NewMIMESystem).
+
 
 #### options.scripts
 Type: `Object[String:String]`
 Default: `undefined`
 
-Path to installation scripts with their corresponding name. The files contents will be added to the spec file.
+Path to [installation scripts](https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/) with their corresponding name. The files contents will be added to the spec file.
 
 ```javascript
 {
@@ -388,8 +388,6 @@ Path to installation scripts with their corresponding name. The files contents w
   }
 }
 ```
-
-You can read more about [scriptlets](https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/)
 
 ## Meta
 
