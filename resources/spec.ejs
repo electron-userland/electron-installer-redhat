@@ -35,14 +35,10 @@ mkdir -p %{buildroot}/usr/
 %preun
 <%= preun %><% } %>
 
+<% if (post) { %>
 %post
-<% if (post) {%><%= post %>
-<% } else { %>
-update-desktop-database &> /dev/null
-<% } %>
+<%= post %><% } %>
 
+<% if (postun) { %>
 %postun
-<% if (postun) {%><%= postun %>
-<% } else { %>
-update-desktop-database &> /dev/null
-<% } %>
+<%= postun %><% } %>
