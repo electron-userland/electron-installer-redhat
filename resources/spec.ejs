@@ -27,8 +27,18 @@ mkdir -p %{buildroot}/usr/
 <% }) } else { %>/usr/share/pixmaps/<%= name %>.png
 <% } %>
 
-%post
-update-desktop-database &> /dev/null
+<% if (pre) { %>
+%pre
+<%= pre %><% } %>
 
+<% if (preun) { %>
+%preun
+<%= preun %><% } %>
+
+<% if (post) { %>
+%post
+<%= post %><% } %>
+
+<% if (postun) { %>
 %postun
-update-desktop-database &> /dev/null
+<%= postun %><% } %>

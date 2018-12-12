@@ -5,6 +5,7 @@ const path = require('path')
 
 const installer = require('..')
 
+const exec = require('mz/child_process').exec
 const access = require('./helpers/access')
 const describeInstaller = require('./helpers/describe_installer')
 const tempOutputDir = describeInstaller.tempOutputDir
@@ -113,4 +114,30 @@ describe('module', function () {
 
     it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
   })
+
+  describeInstaller(
+    'with an app with installation scripts as paths',
+    {
+      src: 'test/fixtures/app-without-asar/',
+      options: {
+        scripts: {
+          pre: 'test/fixtures/script',
+          preun: 'test/fixtures/script',
+          post: 'test/fixtures/script',
+          postun: 'test/fixtures/script'
+        }
+      }
+    },
+    'generates a `.rpm` package with scripts',
+    outputDir => assertNonASARRpmExists(outputDir)
+      .then(() => exec('rpm -qp --scripts bartest.x86_64.rpm', { cwd: outputDir }))
+      .then(stdout => {
+        stdout = stdout.toString()
+        const scripts = ['preinstall', 'postinstall', 'preuninstall', 'postuninstall']
+        if (!scripts.every(element => stdout.includes(element))) {
+          throw new Error(`Some installation scripts are missing:\n ${stdout}`)
+        }
+        return Promise.resolve
+      })
+  )
 })
