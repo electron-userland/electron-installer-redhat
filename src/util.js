@@ -27,7 +27,16 @@ function replaceInvalidVersionCharacters (version) {
   return version.replace(/[-]/g, '.')
 }
 
+/**
+ * Returns a string containing only characters that are allowed as a name of an .rpm file
+ */
+function replaceScopeNameCharacters (name) {
+  name = name || ''
+  return name.replace(/^@/, '').replace(/\//, '_')
+}
+
 module.exports = {
   getHomePage: getHomePage,
-  replaceInvalidVersionCharacters: replaceInvalidVersionCharacters
+  replaceInvalidVersionCharacters: replaceInvalidVersionCharacters,
+  replaceScopeNameCharacters: replaceScopeNameCharacters
 }

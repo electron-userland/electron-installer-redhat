@@ -359,6 +359,12 @@ module.exports = function (data, callback) {
           `Changing ${options.version} to ${adjustedVersion}`)
         options.version = adjustedVersion
       }
+      const adjustedName = util.replaceScopeNameCharacters(options.name)
+      if (adjustedName !== options.name) {
+        data.logger('Warning: replacing scoped package name to comply with guidelines for naming packages.' +
+          `Changing ${options.name} to ${adjustedName}`)
+        options.version = adjustedName
+      }
       return data.logger(`Creating package with options\n${JSON.stringify(options, null, 2)}`)
     })
     .then(() => createDir(options))

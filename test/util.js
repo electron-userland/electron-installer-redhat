@@ -59,4 +59,21 @@ describe('private utility functions', function () {
       })
     })
   })
+
+  describe('replaceScopeNameCharacters', function (test) {
+    [
+      {
+        input: 'poopie',
+        expectedOutput: 'poopie'
+      },
+      {
+        input: '@poopie/core',
+        expectedOutput: 'poopie_core'
+      }
+    ].forEach(scenario => {
+      it(`${JSON.stringify(scenario.input)} -> ${JSON.stringify(scenario.expectedOutput)}`, () => {
+        expect(util.replaceScopeNameCharacters(scenario.input)).to.equal(scenario.expectedOutput)
+      })
+    })
+  })
 })
