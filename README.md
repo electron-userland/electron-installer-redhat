@@ -389,6 +389,12 @@ Path to [installation scripts](https://docs.fedoraproject.org/en-US/packaging-gu
 }
 ```
 
+#### options.desktopTemplate
+Type: `String`
+Default: [`resources/desktop.ejs`](https://github.com/electron-userland/electron-installer-redhat/blob/master/resources/desktop.ejs)
+
+The absolute path to a custom template for the generated [FreeDesktop.org desktop entry](http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html) file.
+
 ## Meta
 
 * Code: `git clone git://github.com/unindented/electron-installer-redhat.git`

@@ -5,7 +5,7 @@ const path = require('path')
 
 const installer = require('..')
 
-const exec = require('mz/child_process').exec
+const { exec } = require('mz/child_process')
 const access = require('./helpers/access')
 const describeInstaller = require('./helpers/describe_installer')
 const tempOutputDir = describeInstaller.tempOutputDir
@@ -139,5 +139,26 @@ describe('module', function () {
         }
         return Promise.resolve
       })
+  )
+
+  describeInstaller(
+    'with a custom desktop template',
+    {
+      src: 'test/fixtures/app-without-asar/',
+      options: {
+        desktopTemplate: 'test/fixtures/custom.desktop.ejs'
+      }
+    },
+    'generates a custom `.desktop` file',
+    outputDir =>
+      assertNonASARRpmExists(outputDir)
+        .then(() => exec('rpm2cpio bartest.x86_64.rpm | cpio -i --to-stdout *.desktop > custom.desktop', { cwd: outputDir }))
+        .then(() => fs.readFile(path.join(outputDir, 'custom.desktop')))
+        .then(data => {
+          if (!data.toString().includes('Comment=Hardcoded comment')) {
+            throw new Error('Did not use custom template')
+          }
+          return Promise.resolve()
+        })
   )
 })
