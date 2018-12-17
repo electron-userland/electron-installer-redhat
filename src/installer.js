@@ -68,6 +68,15 @@ function getOptions (data, defaults) {
   // Flatten everything for ease of use.
   const options = _.defaults({}, data, data.options, defaults)
 
+  if (!options.description && !options.productDescription) {
+    throw new Error(`No Description or ProductDescription provided. Please set either a description in the app's package.json or provide it in the options.`)
+  }
+
+  if (options.description) {
+    // Do not end with a period
+    options.description = options.description.replace(/\.*$/, '')
+  }
+
   // Wrap the extended description to avoid rpmlint warning about
   // `description-line-too-long`.
   options.productDescription = wrap(options.productDescription, {width: 80, indent: ''})
