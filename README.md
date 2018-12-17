@@ -263,12 +263,6 @@ Default: `package.license`
 
 License of the package, used in the [`License` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
-#### options.group
-Type: `String`
-Default: `undefined`
-
-Group of the package, used in the [`Group` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
-
 #### options.arch
 Type: `String`
 Default: `undefined`

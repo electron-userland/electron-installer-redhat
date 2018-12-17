@@ -29,7 +29,6 @@ const getDefaults = function (data) {
       return Object.assign(common.getDefaultsFromPackageJSON(pkg), {
         version: pkg.version || '0.0.0',
         license: pkg.license,
-        group: undefined,
         requires: [
           'lsb',
           'libXScrnSaver'
