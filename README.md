@@ -237,7 +237,8 @@ Generic name of the application (e.g. `Text Editor`), used in the [`GenericName`
 Type: `String`
 Default: `package.description`
 
-Short description of the application, used in the [`Summary` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
+Short, one-line description of the application; do not end with a period.
+Used in the [`Summary` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
 #### options.productDescription
 Type: `String`
@@ -262,12 +263,6 @@ Type: `String`
 Default: `package.license`
 
 License of the package, used in the [`License` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
-
-#### options.group
-Type: `String`
-Default: `undefined`
-
-Group of the package, used in the [`Group` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
 #### options.arch
 Type: `String`
