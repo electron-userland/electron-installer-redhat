@@ -78,14 +78,10 @@ function getOptions (data, defaults) {
 
   // Wrap the extended description to avoid rpmlint warning about
   // `description-line-too-long`.
-  options.productDescription = wrap(options.productDescription, {width: 80, indent: ''})
+  options.productDescription = wrap(options.productDescription, { width: 80, indent: '' })
 
-  // Create array with unique values from default & user-supplied dependencies
-  if (data.options) { // options passed programmatically
-    options.requires = _.union(defaults.requires, data.options.requires)
-  } else { // options passed via command-line
-    options.requires = _.union(defaults.requires, data.requires)
-  }
+  // Merges user and default dependencies
+  options.requires = util.mergeDependencies(data, defaults)
 
   // Scan if there are any installation scripts and adds them to the options
   return generateScripts(options)

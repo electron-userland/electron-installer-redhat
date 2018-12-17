@@ -7,7 +7,6 @@ const installer = require('..')
 
 const { exec } = require('mz/child_process')
 const access = require('./helpers/access')
-const dependencies = require('./helpers/dependencies')
 const describeInstaller = require('./helpers/describe_installer')
 const tempOutputDir = describeInstaller.tempOutputDir
 const testInstallerOptions = describeInstaller.testInstallerOptions
@@ -160,26 +159,6 @@ describe('module', function () {
             throw new Error('Did not use custom template')
           }
           return Promise.resolve()
-        })
-  )
-
-  describeInstaller(
-    'with duplicate dependencies',
-    {
-      src: 'test/fixtures/app-without-asar/',
-      options: {
-        requires: ['perl', 'dbus', 'dbus']
-      }
-    },
-    'removes duplicate dependencies',
-    outputDir =>
-      assertNonASARRpmExists(outputDir)
-        .then(() => {
-          return dependencies.assertDependenciesEqual(
-            outputDir,
-            'bartest.x86_64.rpm',
-            { requires: ['perl', 'dbus', 'dbus'] }
-          )
         })
   )
 })
