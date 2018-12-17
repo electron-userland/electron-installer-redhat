@@ -70,7 +70,7 @@ function getOptions (data, defaults) {
 
   // Wrap the extended description to avoid rpmlint warning about
   // `description-line-too-long`.
-  options.productDescription = wrap(options.productDescription, {width: 100, indent: ''})
+  options.productDescription = wrap(options.productDescription, {width: 80, indent: ''})
 
   // Scan if there are any installation scripts and adds them to the options
   return generateScripts(options)
