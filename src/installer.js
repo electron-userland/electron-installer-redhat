@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const common = require('electron-installer-common')
 const debug = require('debug')
+const dependencies = require('electron-installer-common/src/dependencies')
 const fs = require('fs-extra')
 const nodeify = require('nodeify')
 const path = require('path')
@@ -78,7 +79,10 @@ function getOptions (data, defaults) {
 
   // Wrap the extended description to avoid rpmlint warning about
   // `description-line-too-long`.
-  options.productDescription = wrap(options.productDescription, {width: 80, indent: ''})
+  options.productDescription = wrap(options.productDescription, { width: 80, indent: '' })
+
+  // Merges user and default dependencies
+  options.requires = dependencies.mergeUserSpecified(data, 'requires', defaults)
 
   // Scan if there are any installation scripts and adds them to the options
   return generateScripts(options)
