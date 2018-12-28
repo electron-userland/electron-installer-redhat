@@ -25,8 +25,9 @@ const defaultRename = function (dest, src) {
  * read from `package.json`, and some are hardcoded.
  */
 const getDefaults = function (data) {
-  return Promise.all([common.readMeta(data), readElectronVersion(data.src)])
-    .then(([pkg, electronVersion]) => {
+  return readElectronVersion(data.src)
+    .then(electronVersion => Promise.all([common.readMeta(data), redhatDependencies.forElectron(electronVersion, data.logger)]))
+    .then(([pkg, requires]) => {
       if (!pkg) {
         pkg = {}
       }
@@ -41,7 +42,7 @@ const getDefaults = function (data) {
         post: undefined,
         preun: undefined,
         postun: undefined
-      }, redhatDependencies.forElectron(electronVersion))
+      }, requires)
     })
 }
 

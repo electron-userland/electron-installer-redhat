@@ -7,7 +7,11 @@
 
 ## Requirements
 
-This tool requires Node 6 or greater and `rpmbuild` 4.13 or greater to build the `.rpm` package. On Fedora you can do something like this:
+This tool requires Node 6 or greater and `rpmbuild` to build the `.rpm` package.
+
+**Note**: If your application uses the [Electron API's `shell.moveItemToTrash` method](https://electronjs.org/docs/api/shell#shellmoveitemtotrashfullpath), RPM 4.13.0 or greater is required, due to the [boolean dependency feature](http://rpm.org/user_doc/boolean_dependencies.html).
+
+On Fedora you can do something like this:
 
 ```
 $ sudo dnf install rpm-build
