@@ -279,6 +279,8 @@ Default: The minimum list of packages needed for Electron to run
 
 Packages that are required when the program starts, used in the [`Requires` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
 
+All user requirements will be appended to the default array of requirements, and any duplicates will be removed.
+
 #### options.homepage
 Type: `String`
 Default: `package.homepage || package.author.url`
