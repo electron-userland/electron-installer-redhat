@@ -7,8 +7,10 @@ const dependencies = require('electron-installer-common/src/dependencies')
 const fs = require('fs-extra')
 const nodeify = require('nodeify')
 const path = require('path')
+const readElectronVersion = require('electron-installer-common/src/readelectronversion')
 const wrap = require('word-wrap')
 
+const redhatDependencies = require('./dependencies')
 const spawn = require('./spawn')
 const util = require('./util')
 
@@ -23,26 +25,24 @@ const defaultRename = function (dest, src) {
  * read from `package.json`, and some are hardcoded.
  */
 const getDefaults = function (data) {
-  return common.readMeta(data)
-    .then(pkg => {
-      pkg = pkg || {}
+  return readElectronVersion(data.src)
+    .then(electronVersion => Promise.all([common.readMeta(data), redhatDependencies.forElectron(electronVersion, data.logger)]))
+    .then(([pkg, requires]) => {
+      if (!pkg) {
+        pkg = {}
+      }
 
       return Object.assign(common.getDefaultsFromPackageJSON(pkg), {
         version: pkg.version || '0.0.0',
         license: pkg.license,
-        requires: [
-          'lsb',
-          'libXScrnSaver'
-        ],
         compressionLevel: 2,
-        execArguments: [],
         icon: path.resolve(__dirname, '../resources/icon.png'),
 
         pre: undefined,
         post: undefined,
         preun: undefined,
         postun: undefined
-      })
+      }, requires)
     })
 }
 
@@ -93,7 +93,7 @@ function getOptions (data, defaults) {
  *
  * See: https://fedoraproject.org/wiki/How_to_create_an_RPM_package
  */
-const createSpec = function (options, dir) {
+function createSpec (options, dir) {
   const specSrc = path.resolve(__dirname, '../resources/spec.ejs')
   const specDest = path.join(dir, 'SPECS', options.name + '.spec')
   options.logger(`Creating spec file at ${specDest}`)

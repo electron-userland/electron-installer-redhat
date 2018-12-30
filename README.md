@@ -7,18 +7,21 @@
 
 ## Requirements
 
-This tool requires Node 6 or greater and `rpmbuild` to build the `.rpm` package. On Fedora you can do something like this:
+This tool requires Node 6 or greater and `rpmbuild` to build the `.rpm` package.
+
+**Note**: If your application uses the [Electron API's `shell.moveItemToTrash` method](https://electronjs.org/docs/api/shell#shellmoveitemtotrashfullpath), RPM 4.13.0 or greater is required, due to the [boolean dependency feature](http://rpm.org/user_doc/boolean_dependencies.html).
+
+On Fedora you can do something like this:
 
 ```
 $ sudo dnf install rpm-build
 ```
 
-While on Ubuntu you'll need to do this instead:
+While on Debian/Ubuntu you'll need to do this instead:
 
 ```
 $ sudo apt-get install rpm
 ```
-In order to use [boolean dependencies](http://rpm.org/user_doc/boolean_dependencies.html),`rpm >= 4.13` is required.
 
 ## Installation
 
@@ -272,9 +275,11 @@ Machine architecture the package is targeted to, used to set the `--target` opti
 
 #### options.requires
 Type: `Array[String]`
-Default: `["lsb", "libXScrnSaver"]`
+Default: The minimum list of packages needed for Electron to run
 
 Packages that are required when the program starts, used in the [`Requires` field of the `spec` file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package#Creating_a_SPEC_file).
+
+All user requirements will be appended to the default array of requirements, and any duplicates will be removed.
 
 #### options.homepage
 Type: `String`
