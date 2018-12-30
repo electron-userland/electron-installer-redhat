@@ -8,6 +8,7 @@ const fs = require('fs-extra')
 const nodeify = require('nodeify')
 const path = require('path')
 const readElectronVersion = require('electron-installer-common/src/readelectronversion')
+const replaceScopeName = require('electron-installer-common/src/replacescopename')
 const wrap = require('word-wrap')
 
 const redhatDependencies = require('./dependencies')
@@ -67,6 +68,8 @@ const generateScripts = function (options) {
 function getOptions (data, defaults) {
   // Flatten everything for ease of use.
   const options = _.defaults({}, data, data.options, defaults)
+
+  options.name = replaceScopeName(options.name)
 
   if (!options.description && !options.productDescription) {
     throw new Error(`No Description or ProductDescription provided. Please set either a description in the app's package.json or provide it in the options.`)
