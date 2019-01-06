@@ -26,7 +26,7 @@ module.exports.cleanupOutputDir = function cleanupOutputDir (outputDir) {
 }
 
 module.exports.tempOutputDir = function tempOutputDir (customDir) {
-  return customDir ? path.join(os.tmpdir(), customDir) : tmp.tmpNameSync({prefix: 'electron-installer-redhat-'})
+  return customDir ? path.join(os.tmpdir(), customDir) : tmp.tmpNameSync({ prefix: 'electron-installer-redhat-' })
 }
 
 module.exports.testInstallerOptions = function testInstallerOptions (outputDir, installerOptions) {
@@ -37,5 +37,5 @@ module.exports.testInstallerOptions = function testInstallerOptions (outputDir, 
     options: {
       arch: 'x86_64'
     }
-  }, installerOptions, {dest: outputDir})
+  }, installerOptions, { dest: outputDir })
 }
