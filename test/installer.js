@@ -118,11 +118,21 @@ describe('module', function () {
   describeInstaller(
     'with an app with a scoped name',
     {
-      src: 'test/fixtures/app-without-asar/',
+      src: 'test/fixtures/app-with-asar/',
       options: { name: '@scoped/myapp' }
     },
-    'generates a .deb package',
-    outputDir => access(path.join(outputDir, 'scoped_myapp.x86_64.rpm'))
+    'generates a .rpm package',
+    outputDir => access(path.join(outputDir, 'scoped-myapp.x86_64.rpm'))
+  )
+
+  describeInstaller(
+    'with an app that needs its name sanitized',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: { name: 'Foo/Bar/Baz' }
+    },
+    'generates a .rpm package',
+    outputDir => access(path.join(outputDir, 'Foo-Bar-Baz.x86_64.rpm'))
   )
 
   describeInstaller(
