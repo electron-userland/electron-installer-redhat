@@ -1,17 +1,22 @@
 language: node_js
 node_js:
-  - '10'
-  - '8'
-  - '6'
-
+- '10'
+- '8'
+- '6'
+dist: xenial
+cache:
+  directories:
+  - node_modules
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+\.\d+/
 env:
-  - DEBUG="electron-installer-redhat"
-
+- DEBUG="electron-installer-redhat"
 addons:
   apt:
     packages:
-      - rpm
-
+    - rpm
 deploy:
   provider: npm
   email: unindented@gmail.com

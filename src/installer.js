@@ -135,7 +135,7 @@ function createMacros (options, dir) {
   const macrosDest = path.join(process.env.HOME, '.rpmmacros')
   options.logger(`Creating macros file at ${macrosDest}`)
 
-  return common.generateTemplate(_.assign({dir: dir}, options), macrosSrc)
+  return common.generateTemplate(_.assign({ dir: dir }, options), macrosSrc)
     .then(template => fs.outputFile(macrosDest, template))
     .then(() => dir)
     .catch(common.wrapError('creating macros file'))
