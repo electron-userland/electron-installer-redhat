@@ -1,6 +1,6 @@
 'use strict'
 
-const dependencies = require('electron-installer-common/src/dependencies')
+const common = require('electron-installer-common')
 const spawn = require('./spawn')
 
 const dependencyMap = {
@@ -43,7 +43,7 @@ function rpmVersionSupportsBooleanDependencies (rpmVersionString) {
  * Transforms the list of trash requires into an RPM boolean dependency list.
  */
 function trashRequiresAsBoolean (electronVersion, dependencyMap) {
-  const trashDepends = dependencies.getTrashDepends(electronVersion, dependencyMap)
+  const trashDepends = common.getTrashDepends(electronVersion, dependencyMap)
   if (trashDepends.length === 1) {
     return [trashDepends[0]]
   } else {
@@ -57,7 +57,7 @@ module.exports = {
    * The dependencies for Electron itself, given an Electron version.
    */
   forElectron: function dependenciesForElectron (electronVersion, logger) {
-    const requires = dependencies.getDepends(electronVersion, dependencyMap)
+    const requires = common.getDepends(electronVersion, dependencyMap)
     return module.exports.rpmSupportsBooleanDependencies(logger)
       .then(supportsBooleanDependencies => {
         if (supportsBooleanDependencies) {

@@ -3,12 +3,9 @@
 const _ = require('lodash')
 const common = require('electron-installer-common')
 const debug = require('debug')
-const dependencies = require('electron-installer-common/src/dependencies')
 const fs = require('fs-extra')
 const nodeify = require('nodeify')
 const path = require('path')
-const readElectronVersion = require('electron-installer-common/src/readelectronversion')
-const replaceScopeName = require('electron-installer-common/src/replacescopename')
 const wrap = require('word-wrap')
 
 const redhatDependencies = require('./dependencies')
@@ -26,7 +23,7 @@ const defaultRename = function (dest, src) {
  * read from `package.json`, and some are hardcoded.
  */
 const getDefaults = function (data) {
-  return readElectronVersion(data.src)
+  return common.readElectronVersion(data.src)
     .then(electronVersion => Promise.all([common.readMeta(data), redhatDependencies.forElectron(electronVersion, data.logger)]))
     .then(([pkg, requires]) => {
       if (!pkg) {
@@ -69,7 +66,7 @@ function getOptions (data, defaults) {
   // Flatten everything for ease of use.
   const options = _.defaults({}, data, data.options, defaults)
 
-  options.name = replaceScopeName(options.name)
+  options.name = common.sanitizeName(options.name, '-._+a-zA-Z0-9')
 
   if (!options.description && !options.productDescription) {
     throw new Error(`No Description or ProductDescription provided. Please set either a description in the app's package.json or provide it in the options.`)
@@ -85,7 +82,7 @@ function getOptions (data, defaults) {
   options.productDescription = wrap(options.productDescription, { width: 80, indent: '' })
 
   // Merges user and default dependencies
-  options.requires = dependencies.mergeUserSpecified(data, 'requires', defaults)
+  options.requires = common.mergeUserSpecified(data, 'requires', defaults)
 
   // Scan if there are any installation scripts and adds them to the options
   return generateScripts(options)
