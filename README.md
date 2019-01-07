@@ -1,6 +1,6 @@
 ![Electron Installer for Red Hat](resources/logo.png)
 
-# electron-installer-redhat [![Version](https://img.shields.io/npm/v/electron-installer-redhat.svg)](https://www.npmjs.com/package/electron-installer-redhat) [![Build Status](https://img.shields.io/travis/unindented/electron-installer-redhat.svg)](http://travis-ci.org/unindented/electron-installer-redhat) [![Dependency Status](https://img.shields.io/gemnasium/unindented/electron-installer-redhat.svg)](https://gemnasium.com/unindented/electron-installer-redhat)
+# electron-installer-redhat [![Version](https://img.shields.io/npm/v/electron-installer-redhat.svg)](https://www.npmjs.com/package/electron-installer-redhat) [![Build Status](https://img.shields.io/travis/electron-userland/electron-installer-redhat.svg)](http://travis-ci.org/electron-userland/electron-installer-redhat)
 
 > Create a Red Hat package for your Electron app.
 
@@ -397,8 +397,8 @@ The absolute path to a custom template for the generated [FreeDesktop.org deskto
 
 ## Meta
 
-* Code: `git clone git://github.com/unindented/electron-installer-redhat.git`
-* Home: <https://github.com/unindented/electron-installer-redhat/>
+* Code: `git clone git://github.com/electron-userland/electron-installer-redhat.git`
+* Home: <https://github.com/electron-userland/electron-installer-redhat/>
 
 
 ## Contributors
