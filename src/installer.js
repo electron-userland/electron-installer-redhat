@@ -87,8 +87,10 @@ class RedhatInstaller extends common.ElectronInstaller {
    */
   generateDefaults () {
     return common.readElectronVersion(this.userSupplied.src)
-      .then(electronVersion => Promise.all([common.readMetadata(this.userSupplied), redhatDependencies.forElectron(electronVersion, this.userSupplied.logger)]))
-      .then(([pkg, requires]) => {
+      .then(electronVersion => Promise.all([
+        common.readMetadata(this.userSupplied),
+        redhatDependencies.forElectron(electronVersion, this.userSupplied.logger)
+      ])).then(([pkg, requires]) => {
         pkg = pkg || {}
 
         this.defaults = Object.assign(common.getDefaultsFromPackageJSON(pkg), {
