@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v1.0.0...master
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v1.0.1...master
+
+## [1.0.1] - 2019-02-20
+
+[1.0.1]: https://github.com/electron-userland/electron-installer-redhat/compare/v1.0.0...v1.0.1
+
+### Changed
+
+* Upgrade to `electron-installer-common@^0.6.1` (#104)
 
 ## [1.0.0] - 2019-01-07
 
