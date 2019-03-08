@@ -26,6 +26,7 @@ class RedhatInstaller extends common.ElectronInstaller {
   get contentFunctions () {
     return [
       'copyApplication',
+      'updateSandboxHelperPermissions',
       'copyLinuxIcons',
       'createBinarySymlink',
       'createCopyright',
@@ -44,14 +45,6 @@ class RedhatInstaller extends common.ElectronInstaller {
 
   get specPath () {
     return path.join(this.stagingDir, 'SPECS', `${this.options.name}.spec`)
-  }
-
-  /**
-   * Copy the application into the package.
-   */
-  copyApplication () {
-    return super.copyApplication()
-      .then(() => this.updateSandboxHelperPermissions())
   }
 
   /**
