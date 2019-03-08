@@ -45,17 +45,13 @@ class RedhatInstaller extends common.ElectronInstaller {
   get specPath () {
     return path.join(this.stagingDir, 'SPECS', `${this.options.name}.spec`)
   }
-  
+
   /**
    * Copy the application into the package.
    */
-  async copyApplication () {
-    await super.copyApplication()
-    
-    // The sandbox helper executable must have the setuid (+s / 0o4000) bit set.
-    const sandboxHelperPath = path.join(this.stagingDir, 'chrome-sandbox')
-    if (await fs.exists(sandboxHelperPath))
-      await fs.chmod(sandboxHelperPath, 0o4755)
+  copyApplication () {
+    return super.copyApplication()
+      .then(() => this.updateSandboxHelperPermissions())
   }
 
   /**
