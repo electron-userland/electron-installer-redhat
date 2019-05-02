@@ -47,6 +47,14 @@ class RedhatInstaller extends common.ElectronInstaller {
   }
 
   /**
+   * Copy the application into the package.
+   */
+  copyApplication () {
+    return super.copyApplication()
+      .then(() => this.updateSandboxHelperPermissions())
+  }
+
+  /**
    * Creates macros file used by `rpmbuild`.
    */
   createMacros () {
