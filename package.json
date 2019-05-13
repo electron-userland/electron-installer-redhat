@@ -35,7 +35,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "electron-installer-common": "^0.6.2",
-    "fs-extra": "^7.0.1",
+    "fs-extra": "^8.0.0",
     "lodash": "^4.17.4",
     "nodeify": "^1.0.1",
     "word-wrap": "^1.2.3",
