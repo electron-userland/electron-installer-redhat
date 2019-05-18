@@ -24,9 +24,9 @@ const dependencyMap = {
  * Retrieves the RPM version number and determines whether it has support for boolean
  * dependencies (>= 4.13.0).
  */
-function rpmSupportsBooleanDependencies (logger) {
-  return spawn('rpmbuild', ['--version'], logger)
-    .then(output => rpmVersionSupportsBooleanDependencies(output.trim().split(' ')[2]))
+async function rpmSupportsBooleanDependencies (logger) {
+  const output = await spawn('rpmbuild', ['--version'], logger)
+  return rpmVersionSupportsBooleanDependencies(output.trim().split(' ')[2])
 }
 
 /**
@@ -56,18 +56,15 @@ module.exports = {
   /**
    * The dependencies for Electron itself, given an Electron version.
    */
-  forElectron: function dependenciesForElectron (electronVersion, logger) {
+  forElectron: async function dependenciesForElectron (electronVersion, logger) {
     const requires = common.getDepends(electronVersion, dependencyMap)
-    return module.exports.rpmSupportsBooleanDependencies(logger)
-      .then(supportsBooleanDependencies => {
-        if (supportsBooleanDependencies) {
-          const trashRequires = trashRequiresAsBoolean(electronVersion, dependencyMap)
-          return { requires: requires.concat(trashRequires) }
-        } else {
-          console.warn("You are using RPM < 4.13, which does not support boolean dependencies. This is required to express the dependencies needed for the 'shell.moveItemToTrash' API.\nIf you do not use this API, you can safely ignore this warning.\nIf you do use this API, please upgrade to RPM 4.13 or above to have the trash dependencies added to your RPM's requires section.")
-          return { requires }
-        }
-      })
+    if (await module.exports.rpmSupportsBooleanDependencies(logger)) {
+      const trashRequires = trashRequiresAsBoolean(electronVersion, dependencyMap)
+      return { requires: requires.concat(trashRequires) }
+    } else {
+      console.warn("You are using RPM < 4.13, which does not support boolean dependencies. This is required to express the dependencies needed for the 'shell.moveItemToTrash' API.\nIf you do not use this API, you can safely ignore this warning.\nIf you do use this API, please upgrade to RPM 4.13 or above to have the trash dependencies added to your RPM's requires section.")
+      return { requires }
+    }
   },
   rpmSupportsBooleanDependencies,
   rpmVersionSupportsBooleanDependencies,

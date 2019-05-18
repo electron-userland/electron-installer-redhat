@@ -12,20 +12,16 @@ describe('dependencies', () => {
       sinon.restore()
     })
 
-    it('uses an RPM that does not support boolean dependencies', () => {
+    it('uses an RPM that does not support boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(false)
-      return dependencies.forElectron('v1.0.0')
-        .then(result => {
-          expect(console.warn.calledWithMatch(/^You are using RPM < 4.13/)).to.equal(true)
-        })
+      await dependencies.forElectron('v1.0.0')
+      expect(console.warn.calledWithMatch(/^You are using RPM < 4.13/)).to.equal(true)
     })
 
-    it('uses an RPM that supports boolean dependencies', () => {
+    it('uses an RPM that supports boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(true)
-      return dependencies.forElectron('v1.0.0')
-        .then(result => {
-          expect(console.warn.calledWithMatch(/^You are using RPM < 4.13/)).to.equal(false)
-        })
+      await dependencies.forElectron('v1.0.0')
+      expect(console.warn.calledWithMatch(/^You are using RPM < 4.13/)).to.equal(false)
     })
   })
 
