@@ -4,7 +4,6 @@ const _ = require('lodash')
 const common = require('electron-installer-common')
 const debug = require('debug')
 const fs = require('fs-extra')
-const nodeify = require('nodeify')
 const path = require('path')
 const wrap = require('word-wrap')
 
@@ -171,18 +170,13 @@ class RedhatInstaller extends common.ElectronInstaller {
 
 /* ************************************************************************** */
 
-module.exports = (data, callback) => {
+module.exports = data => {
   data.rename = data.rename || defaultRename
   data.logger = data.logger || defaultLogger
 
-  if (callback) {
-    console.warn('The node-style callback is deprecated. In a future major version, it will be' +
-                 'removed in favor of a Promise-based async style.')
-  }
-
   const installer = new RedhatInstaller(data)
 
-  const promise = installer.generateDefaults()
+  return installer.generateDefaults()
     .then(() => installer.generateOptions())
     .then(() => installer.generateScripts())
     .then(() => data.logger(`Creating package with options\n${JSON.stringify(installer.options, null, 2)}`))
@@ -198,8 +192,6 @@ module.exports = (data, callback) => {
       data.logger(common.errorMessage('creating package', err))
       throw err
     })
-
-  return nodeify(promise, callback)
 }
 
 module.exports.Installer = RedhatInstaller

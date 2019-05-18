@@ -117,7 +117,7 @@ $ npm install --save-dev electron-installer-redhat
 
 Edit the `scripts` section of your `package.json`:
 
-```js
+```json
 {
   "name": "app",
   "description": "An awesome app!",
@@ -147,16 +147,16 @@ You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
 
 Install the package locally:
 
-```
+```shell
 $ npm install --save-dev electron-installer-redhat
 ```
 
 And write something like this:
 
-```js
-var installer = require('electron-installer-redhat')
+```javascript
+const installer = require('electron-installer-redhat')
 
-var options = {
+const options = {
   src: 'dist/app-linux-x64/',
   dest: 'dist/installers/',
   arch: 'x86_64'
@@ -164,23 +164,23 @@ var options = {
 
 console.log('Creating package (this may take a while)')
 
-installer(options, function (err) {
-  if (err) {
+installer(options)
+  .then(() => console.log(`Successfully created package at ${options.dest}`))
+  .catch(err => {
     console.error(err, err.stack)
     process.exit(1)
-  }
-
-  console.log('Successfully created package at ' + options.dest)
-})
+  })
 ```
 
 You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
+
+_Note: As of 2.0.0, the Node-style callback pattern is no longer available. You can use [`util.callbackify`](https://nodejs.org/api/util.html#util_util_callbackify_original) if this is required for your use case._
 
 ### Options
 
 Even though you can pass most of these options through the command-line interface, it may be easier to create a configuration file:
 
-```js
+```javascript
 {
   "dest": "dist/installers/",
   "icon": "resources/Icon.png",
@@ -192,7 +192,7 @@ Even though you can pass most of these options through the command-line interfac
 
 And pass that instead with the `config` option:
 
-```
+```shell
 $ electron-installer-redhat --src dist/app-linux-x64/ --arch x86_64 --config config.json
 ```
 
