@@ -1,15 +1,14 @@
 'use strict'
 
-const fs = require('fs-extra')
-const path = require('path')
-
-const installer = require('..')
-
-const { exec } = require('mz/child_process')
 const access = require('./helpers/access')
-const describeInstaller = require('./helpers/describe_installer')
-const tempOutputDir = describeInstaller.tempOutputDir
-const testInstallerOptions = describeInstaller.testInstallerOptions
+const childProcess = require('child_process')
+const describeInstaller, { tempOutputDir, testInstallerOptions } = require('./helpers/describe_installer')
+const fs = require('fs-extra')
+const installer = require('..')
+const path = require('path')
+const { promisify } = require('util')
+
+const exec = promisify(childProcess.exec)
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))
