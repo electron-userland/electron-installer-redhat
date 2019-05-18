@@ -7,7 +7,7 @@
 
 ## Requirements
 
-This tool requires Node 6 or greater and `rpmbuild` to build the `.rpm` package.
+This tool requires Node 8 or greater and `rpmbuild` to build the `.rpm` package.
 
 **Note**: If your application uses the [Electron API's `shell.moveItemToTrash` method](https://electronjs.org/docs/api/shell#shellmoveitemtotrashfullpath), RPM 4.13.0 or greater is required, due to the [boolean dependency feature](http://rpm.org/user_doc/boolean_dependencies.html).
 
