@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "electron-installer-common": "electron-userland/electron-installer-common#drop-node-6",
+    "electron-installer-common": "electron-userland/electron-installer-common",
     "fs-extra": "^8.0.1",
     "lodash": "^4.17.4",
     "word-wrap": "^1.2.3",
