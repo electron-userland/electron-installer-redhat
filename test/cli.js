@@ -29,7 +29,7 @@ describe('cli', function () {
 
     runCLI({ src: 'test/fixtures/app-with-asar/', dest: outputDir, arch: 'x86' })
 
-    it('generates a `.rpm` package', () => access(path.join(outputDir, 'footest-0.0.1.x86.rpm')))
+    it('generates a `.rpm` package', () => access(path.join(outputDir, 'footest-0.0.1-1.x86.rpm')))
 
     cleanupOutputDir(outputDir)
   })
@@ -39,7 +39,7 @@ describe('cli', function () {
 
     runCLI({ src: 'test/fixtures/app-without-asar/', dest: outputDir, arch: 'x86_64' })
 
-    it('generates a `.rpm` package', () => access(path.join(outputDir, 'bartest-0.0.1.x86_64.rpm')))
+    it('generates a `.rpm` package', () => access(path.join(outputDir, 'bartest-0.0.1-1.x86_64.rpm')))
 
     after(() => fs.remove(outputDir))
   })
