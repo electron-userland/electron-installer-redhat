@@ -61,7 +61,7 @@ class RedhatInstaller extends common.ElectronInstaller {
     const dest = path.join(process.env.HOME, '.rpmmacros')
     this.options.logger(`Creating macros file at ${dest}`)
 
-    return common.wrapError('creating macros file', async () => common.createTemplatedFile(src, dest, Object.assign({ dir: this.stagingDir }, this.options)))
+    return common.wrapError('creating macros file', async () => common.createTemplatedFile(src, dest, { dir: this.stagingDir, ...this.options }))
   }
 
   /**
@@ -96,17 +96,18 @@ class RedhatInstaller extends common.ElectronInstaller {
       (async () => (await common.readMetadata(this.userSupplied)) || {})(),
       redhatDependencies.forElectron(electronVersion, this.userSupplied.logger)
     ])
-    this.defaults = Object.assign(common.getDefaultsFromPackageJSON(pkg), {
+    this.defaults = {
+      ...common.getDefaultsFromPackageJSON(pkg),
       version: pkg.version || '0.0.0',
       license: pkg.license,
       compressionLevel: 2,
       icon: path.resolve(__dirname, '../resources/icon.png'),
-
       pre: undefined,
       post: undefined,
       preun: undefined,
-      postun: undefined
-    }, requires)
+      postun: undefined,
+      ...requires
+    }
 
     return this.defaults
   }
