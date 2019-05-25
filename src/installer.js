@@ -97,7 +97,7 @@ class RedhatInstaller extends common.ElectronInstaller {
       redhatDependencies.forElectron(electronVersion, this.userSupplied.logger)
     ])
     this.defaults = {
-      ...common.getDefaultsFromPackageJSON(pkg),
+      ...common.getDefaultsFromPackageJSON(pkg, { revision: 1 }),
       version: pkg.version || '0.0.0',
       license: pkg.license,
       compressionLevel: 2,
