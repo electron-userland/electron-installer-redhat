@@ -162,14 +162,18 @@ const options = {
   arch: 'x86_64'
 }
 
-console.log('Creating package (this may take a while)')
+async function main (options) {
+  console.log('Creating package (this may take a while)')
 
-installer(options)
-  .then(() => console.log(`Successfully created package at ${options.dest}`))
-  .catch(err => {
+  try {
+    await installer(options)
+    console.log(`Successfully created package at ${options.dest}`)
+  } catch (err) {
     console.error(err, err.stack)
     process.exit(1)
-  })
+  }
+}
+main(options)
 ```
 
 You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
