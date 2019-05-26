@@ -21,7 +21,7 @@
     "linux"
   ],
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 8.0.0"
   },
   "main": "src/installer.js",
   "bin": {
@@ -34,25 +34,23 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "electron-installer-common": "^0.6.2",
+    "electron-installer-common": "^0.7.0",
     "fs-extra": "^8.0.1",
     "lodash": "^4.17.4",
-    "nodeify": "^1.0.1",
     "word-wrap": "^1.2.3",
     "yargs": "^13.2.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "^5.12.0",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
     "mocha": "^6.0.0",
-    "mz": "^2.7.0",
     "promise-retry": "^1.1.1",
-    "sinon": "^7.2.2",
-    "tmp-promise": "^1.0.4"
+    "sinon": "^7.3.2",
+    "tmp-promise": "^2.0.1"
   }
 }

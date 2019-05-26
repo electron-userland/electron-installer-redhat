@@ -1,21 +1,26 @@
 'use strict'
 
-const fs = require('fs-extra')
-const path = require('path')
-
-const installer = require('..')
-
-const { exec } = require('mz/child_process')
 const access = require('./helpers/access')
-const describeInstaller = require('./helpers/describe_installer')
-const tempOutputDir = describeInstaller.tempOutputDir
-const testInstallerOptions = describeInstaller.testInstallerOptions
+const childProcess = require('child_process')
+const { describeInstaller, tempOutputDir, testInstallerOptions } = require('./helpers/describe_installer')
+const fs = require('fs-extra')
+const installer = require('..')
+const path = require('path')
+const { promisify } = require('util')
+
+const exec = promisify(childProcess.exec)
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))
 
 const assertNonASARRpmExists = outputDir =>
   access(path.join(outputDir, 'bartest.x86_64.rpm'))
+
+const updateJSON = async (filename, updateFunc) => {
+  const packageJSON = await fs.readJson(filename)
+  updateFunc(packageJSON)
+  await fs.writeJson(filename, packageJSON)
+}
 
 describe('module', function () {
   this.timeout(10000)
@@ -57,28 +62,17 @@ describe('module', function () {
     const baseDir = tempOutputDir('app-without-homepage')
     let outputDir
 
-    after(() => fs.remove(baseDir))
-    after(() => fs.remove(outputDir))
+    after(async () => fs.remove(baseDir))
+    after(async () => fs.remove(outputDir))
 
-    before(() => {
-      let pkgJSONFilename
-      return fs.emptyDir(baseDir)
-        .then(() => fs.copy('test/fixtures/app-without-asar', baseDir))
-        .then(() => {
-          pkgJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
-          return pkgJSONFilename
-        })
-        .then(file => fs.readJson(file))
-        .then(pkgJSON => {
-          pkgJSON.author = 'Test Author'
-          return fs.writeJson(pkgJSONFilename, pkgJSON)
-        })
-        .then(() => tempOutputDir())
-        .then(tmpdir => {
-          outputDir = tmpdir
-          return testInstallerOptions(outputDir, { src: baseDir })
-        })
-        .then(options => installer(options))
+    before(async () => {
+      await fs.emptyDir(baseDir)
+      await fs.copy('test/fixtures/app-without-asar', baseDir)
+      await updateJSON(path.join(baseDir, 'resources', 'app', 'package.json'), packageJSON => {
+        packageJSON.author = 'Test Author'
+      })
+      outputDir = tempOutputDir()
+      await installer(testInstallerOptions(outputDir, { src: baseDir }))
     })
 
     it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
@@ -88,28 +82,17 @@ describe('module', function () {
     const baseDir = tempOutputDir('app-with-hyphen')
     let outputDir
 
-    after(() => fs.remove(baseDir))
-    after(() => fs.remove(outputDir))
+    after(async () => fs.remove(baseDir))
+    after(async () => fs.remove(outputDir))
 
-    before(() => {
-      let pkgJSONFilename
-      return fs.emptyDir(baseDir)
-        .then(() => fs.copy('test/fixtures/app-without-asar', baseDir))
-        .then(() => {
-          pkgJSONFilename = path.join(baseDir, 'resources', 'app', 'package.json')
-          return pkgJSONFilename
-        })
-        .then(file => fs.readJson(file))
-        .then(pkgJSON => {
-          pkgJSON.version = '1.0.0-beta+internal-only.0'
-          return fs.writeJson(pkgJSONFilename, pkgJSON)
-        })
-        .then(() => tempOutputDir())
-        .then(tmpdir => {
-          outputDir = tmpdir
-          return testInstallerOptions(outputDir, { src: baseDir })
-        })
-        .then(options => installer(options))
+    before(async () => {
+      await fs.emptyDir(baseDir)
+      await fs.copy('test/fixtures/app-without-asar', baseDir)
+      await updateJSON(path.join(baseDir, 'resources', 'app', 'package.json'), packageJSON => {
+        packageJSON.version = '1.0.0-beta+internal-only.0'
+      })
+      outputDir = tempOutputDir()
+      await installer(testInstallerOptions(outputDir, { src: baseDir }))
     })
 
     it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
@@ -139,15 +122,14 @@ describe('module', function () {
       }
     },
     'generates a `.rpm` package with scripts',
-    outputDir => assertNonASARRpmExists(outputDir)
-      .then(() => exec('rpm -qp --scripts bartest.x86_64.rpm', { cwd: outputDir }))
-      .then(stdout => {
-        stdout = stdout.toString()
-        const scripts = ['preinstall', 'postinstall', 'preuninstall', 'postuninstall']
-        if (!scripts.every(element => stdout.includes(element))) {
-          throw new Error(`Some installation scripts are missing:\n ${stdout}`)
-        }
-        return Promise.resolve
-      })
+    async outputDir => {
+      await assertNonASARRpmExists(outputDir)
+      let { stdout } = await exec('rpm -qp --scripts bartest.x86_64.rpm', { cwd: outputDir })
+      stdout = stdout.toString()
+      const scripts = ['preinstall', 'postinstall', 'preuninstall', 'postuninstall']
+      if (!scripts.every(element => stdout.includes(element))) {
+        throw new Error(`Some installation scripts are missing:\n ${stdout}`)
+      }
+    }
   )
 })

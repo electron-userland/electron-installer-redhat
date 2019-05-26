@@ -4,7 +4,6 @@ const _ = require('lodash')
 const common = require('electron-installer-common')
 const debug = require('debug')
 const fs = require('fs-extra')
-const nodeify = require('nodeify')
 const path = require('path')
 const wrap = require('word-wrap')
 
@@ -49,9 +48,9 @@ class RedhatInstaller extends common.ElectronInstaller {
   /**
    * Copy the application into the package.
    */
-  copyApplication () {
-    return super.copyApplication()
-      .then(() => this.updateSandboxHelperPermissions())
+  async copyApplication () {
+    await super.copyApplication()
+    return this.updateSandboxHelperPermissions()
   }
 
   /**
@@ -62,18 +61,17 @@ class RedhatInstaller extends common.ElectronInstaller {
     const dest = path.join(process.env.HOME, '.rpmmacros')
     this.options.logger(`Creating macros file at ${dest}`)
 
-    return common.createTemplatedFile(src, dest, Object.assign({ dir: this.stagingDir }, this.options))
-      .catch(common.wrapError('creating macros file'))
+    return common.wrapError('creating macros file', async () => common.createTemplatedFile(src, dest, { dir: this.stagingDir, ...this.options }))
   }
 
   /**
    * Package everything using `rpmbuild`.
    */
-  createPackage () {
+  async createPackage () {
     this.options.logger(`Creating package at ${this.stagingDir}`)
 
-    return spawn('rpmbuild', ['-bb', this.specPath, '--target', this.options.arch], this.options.logger)
-      .then(output => this.options.logger(`rpmbuild output: ${output}`))
+    const output = await spawn('rpmbuild', ['-bb', this.specPath, '--target', this.options.arch], this.options.logger)
+    this.options.logger(`rpmbuild output: ${output}`)
   }
 
   /**
@@ -81,40 +79,37 @@ class RedhatInstaller extends common.ElectronInstaller {
    *
    * See: https://fedoraproject.org/wiki/How_to_create_an_RPM_package
    */
-  createSpec () {
+  async createSpec () {
     const src = path.resolve(__dirname, '../resources/spec.ejs')
     this.options.logger(`Creating spec file at ${this.specPath}`)
 
-    return this.createTemplatedFile(src, this.specPath)
-      .catch(common.wrapError('creating spec file'))
+    return common.wrapError('creating spec file', async () => this.createTemplatedFile(src, this.specPath))
   }
 
   /**
    * Get the hash of default options for the installer. Some come from the info
    * read from `package.json`, and some are hardcoded.
    */
-  generateDefaults () {
-    return common.readElectronVersion(this.userSupplied.src)
-      .then(electronVersion => Promise.all([
-        common.readMetadata(this.userSupplied),
-        redhatDependencies.forElectron(electronVersion, this.userSupplied.logger)
-      ])).then(([pkg, requires]) => {
-        pkg = pkg || {}
+  async generateDefaults () {
+    const electronVersion = await common.readElectronVersion(this.userSupplied.src)
+    const [pkg, requires] = await Promise.all([
+      (async () => (await common.readMetadata(this.userSupplied)) || {})(),
+      redhatDependencies.forElectron(electronVersion, this.userSupplied.logger)
+    ])
+    this.defaults = {
+      ...common.getDefaultsFromPackageJSON(pkg, { revision: 1 }),
+      version: pkg.version || '0.0.0',
+      license: pkg.license,
+      compressionLevel: 2,
+      icon: path.resolve(__dirname, '../resources/icon.png'),
+      pre: undefined,
+      post: undefined,
+      preun: undefined,
+      postun: undefined,
+      ...requires
+    }
 
-        this.defaults = Object.assign(common.getDefaultsFromPackageJSON(pkg), {
-          version: pkg.version || '0.0.0',
-          license: pkg.license,
-          compressionLevel: 2,
-          icon: path.resolve(__dirname, '../resources/icon.png'),
-
-          pre: undefined,
-          post: undefined,
-          preun: undefined,
-          postun: undefined
-        }, requires)
-
-        return this.defaults
-      })
+    return this.defaults
   }
 
   /**
@@ -147,14 +142,13 @@ class RedhatInstaller extends common.ElectronInstaller {
   /**
    * Read scripts from provided filename and add them to the options
    */
-  generateScripts () {
+  async generateScripts () {
     const scriptNames = ['pre', 'post', 'preun', 'postun']
 
-    return Promise.all(_.map(this.options.scripts, (item, key) => {
+    return Promise.all(_.map(this.options.scripts, async (item, key) => {
       if (scriptNames.includes(key)) {
         this.options.logger(`Creating installation script ${key}`)
-        return fs.readFile(item)
-          .then(script => (this.options[key] = script.toString()))
+        this.options[key] = (await fs.readFile(item)).toString()
       }
     }))
   }
@@ -171,35 +165,23 @@ class RedhatInstaller extends common.ElectronInstaller {
 
 /* ************************************************************************** */
 
-module.exports = (data, callback) => {
+module.exports = async data => {
   data.rename = data.rename || defaultRename
   data.logger = data.logger || defaultLogger
 
-  if (callback) {
-    console.warn('The node-style callback is deprecated. In a future major version, it will be' +
-                 'removed in favor of a Promise-based async style.')
-  }
-
   const installer = new RedhatInstaller(data)
 
-  const promise = installer.generateDefaults()
-    .then(() => installer.generateOptions())
-    .then(() => installer.generateScripts())
-    .then(() => data.logger(`Creating package with options\n${JSON.stringify(installer.options, null, 2)}`))
-    .then(() => installer.createStagingDir())
-    .then(() => installer.createMacros())
-    .then(() => installer.createContents())
-    .then(() => installer.createPackage())
-    .then(() => installer.movePackage())
-    .then(() => {
-      data.logger(`Successfully created package at ${installer.options.dest}`)
-      return installer.options
-    }).catch(err => {
-      data.logger(common.errorMessage('creating package', err))
-      throw err
-    })
-
-  return nodeify(promise, callback)
+  await installer.generateDefaults()
+  await installer.generateOptions()
+  await installer.generateScripts()
+  await data.logger(`Creating package with options\n${JSON.stringify(installer.options, null, 2)}`)
+  await installer.createStagingDir()
+  await installer.createMacros()
+  await installer.createContents()
+  await installer.createPackage()
+  await installer.movePackage()
+  data.logger(`Successfully created package at ${installer.options.dest}`)
+  return installer.options
 }
 
 module.exports.Installer = RedhatInstaller
