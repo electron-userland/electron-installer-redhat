@@ -105,7 +105,7 @@ And point it to your built app:
 $ electron-installer-redhat --src dist/app-linux-x64/ --dest dist/installers/ --arch x86_64
 ```
 
-You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
+You'll end up with the package at `dist/installers/app-0.0.1-1.x86_64.rpm`.
 
 ### Scripts
 
@@ -141,7 +141,7 @@ And run the script:
 $ npm run rpm64
 ```
 
-You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
+You'll end up with the package at `dist/installers/app-0.0.1-1.x86_64.rpm`.
 
 ### Programmatically
 
@@ -176,7 +176,7 @@ async function main (options) {
 main(options)
 ```
 
-You'll end up with the package at `dist/installers/app-0.0.1.x86_64.rpm`.
+You'll end up with the package at `dist/installers/app-0.0.1-1.x86_64.rpm`.
 
 _Note: As of 2.0.0, the Node-style callback pattern is no longer available. You can use [`util.callbackify`](https://nodejs.org/api/util.html#util_util_callbackify_original) if this is required for your use case._
 
@@ -259,7 +259,7 @@ Version number of the package, used in the [`Version` field of the `spec` file](
 
 #### options.revision
 Type: `String`
-Default: `package.revision`
+Default: `package.revision || 1`
 
 Revision number of the package, used in the [`Release` field of the `spec` file](https://docs.fedoraproject.org/en-US/quick-docs/creating-rpm-packages/index.html#con_rpm-spec-file-overview).
 
