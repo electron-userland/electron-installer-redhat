@@ -109,6 +109,21 @@ describe('module', function () {
   )
 
   describeInstaller(
+    'with an app with an SVG icon',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        arch: 'x86',
+        icon: {
+          'scalable': 'test/fixtures/scaled-icon.svg'
+        }
+      }
+    },
+    'generates a .rpm package',
+    assertASARRpmExists
+  )
+
+  describeInstaller(
     'with an app with installation scripts as paths',
     {
       src: 'test/fixtures/app-without-asar/',
