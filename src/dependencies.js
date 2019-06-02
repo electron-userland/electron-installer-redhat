@@ -4,6 +4,7 @@ const common = require('electron-installer-common')
 const spawn = require('./spawn')
 
 const dependencyMap = {
+  atspi: 'at-spi2-core',
   gconf: 'GConf2',
   glib2: 'glib2',
   gtk2: 'gtk2',
