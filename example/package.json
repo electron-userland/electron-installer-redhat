@@ -1,5 +1,5 @@
 {
-  "name": "poopie",
+  "name": "example-electron-app",
   "description": "An example app, built with Electron.",
   "version": "0.0.1",
   "license": "MIT",
@@ -13,14 +13,12 @@
   "scripts": {
     "clean": "rimraf dist",
     "start": "electron .",
-    "exe32": "electron-packager . poopie --platform linux --arch ia32 --out dist/ --ignore \"(dist|node_modules/electron.*)\"",
-    "exe64": "electron-packager . poopie --platform linux --arch x64 --out dist/ --ignore \"(dist|node_modules/electron.*)\"",
-    "rpm32": "electron-installer-redhat --src dist/poopie-linux-ia32/ --arch x86 --config config.json",
-    "rpm64": "electron-installer-redhat --src dist/poopie-linux-x64/ --arch x86_64 --config config.json",
-    "build": "npm run clean && npm run exe32 && npm run rpm32 && npm run exe64 && npm run rpm64"
+    "bundle:x64": "electron-packager . --platform linux --arch x64 --out dist/",
+    "rpm:x64": "electron-installer-redhat --src dist/example-electron-app-linux-x64/ --arch x86_64 --config config.json",
+    "build": "npm run clean && npm run bundle:x64 && npm run rpm:x64"
   },
   "devDependencies": {
-    "electron": "^3.0.0",
+    "electron": "^5.0.0",
     "electron-installer-redhat": "*",
     "electron-packager": "^13.0.0",
     "rimraf": "^2.6.2"
