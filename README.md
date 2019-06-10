@@ -48,7 +48,7 @@ Say your Electron app lives in `path/to/app`, and has a structure like this:
 ├── README.md
 ├── node_modules
 │   ├── electron-packager
-│   └── electron-prebuilt
+│   └── electron
 ├── package.json
 ├── resources
 │   ├── Icon.png
