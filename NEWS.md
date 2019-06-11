@@ -1,8 +1,27 @@
-# Changes by Version
+# `electron-installer-redhat` - Changes by Version
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v1.1.0...master
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v2.0.0...master
+
+## [2.0.0] - 2019-06-11
+
+[2.0.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v1.1.0...v2.0.0
+
+### Added
+
+* ATSPI dependency for Electron >= 5 (#126)
+
+### Fixed
+
+* Always add revision/release to the RPM filename (#114)
+* Include SVG files into the spec file (#125)
+
+### Removed
+
+* Node-style callback support (use [`util.callbackify`](https://nodejs.org/api/util.html#util_util_callbackify_original)
+  if you need that functionality)
+* Node &lt; 8 support (#121)
 
 ## [1.1.0] - 2019-05-01
 
