@@ -10,7 +10,7 @@ const dependencyMap = {
   gtk2: 'gtk2',
   gtk3: 'gtk3',
   gvfs: 'gvfs-client',
-  kdeCliTools: 'kde-cli-tools',
+  kdeCliTools: ['kde-cli-tools', 'kde-cli-tools5'],
   kdeRuntime: 'kde-runtime',
   notify: 'libnotify',
   nss: 'nss',
