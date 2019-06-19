@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "electron-installer-common": "electron-userland/electron-installer-common#multiple-trash-dep-options",
+    "electron-installer-common": "^0.7.3",
     "fs-extra": "^8.0.1",
     "lodash": "^4.17.4",
     "word-wrap": "^1.2.3",
