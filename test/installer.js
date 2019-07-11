@@ -115,7 +115,7 @@ describe('module', function () {
       options: {
         arch: 'x86',
         icon: {
-          'scalable': 'test/fixtures/scaled-icon.svg'
+          scalable: 'test/fixtures/scaled-icon.svg'
         }
       }
     },
