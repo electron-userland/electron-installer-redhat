@@ -12,13 +12,13 @@ const dependencyMap = {
   gvfs: 'gvfs-client',
   kdeCliTools: ['kde-cli-tools', 'kde-cli-tools5'],
   kdeRuntime: 'kde-runtime',
-  notify: 'libnotify',
-  nss: 'nss',
+  notify: ['libnotify', 'libnotify4'],
+  nss: ['nss', 'mozilla-nss'],
   trashCli: 'trash-cli',
-  uuid: 'libuuid',
+  uuid: ['libuuid', 'libuuid1'],
   xdgUtils: 'xdg-utils',
   xss: 'libXScrnSaver',
-  xtst: 'libXtst'
+  xtst: ['libXtst', 'libXtst6']
 }
 
 /**
