@@ -121,7 +121,7 @@ class RedhatInstaller extends common.ElectronInstaller {
     this.options.name = common.sanitizeName(this.options.name, '-._+a-zA-Z0-9')
 
     if (!this.options.description && !this.options.productDescription) {
-      throw new Error(`No Description or ProductDescription provided. Please set either a description in the app's package.json or provide it in the options.`)
+      throw new Error("No Description or ProductDescription provided. Please set either a description in the app's package.json or provide it in the options.")
     }
 
     if (this.options.description) {
