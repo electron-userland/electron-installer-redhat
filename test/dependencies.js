@@ -4,24 +4,26 @@ const sinon = require('sinon')
 
 describe('dependencies', () => {
   describe('forElectron', () => {
-    beforeEach(() => {
-      sinon.spy(console, 'warn')
-    })
-
     afterEach(() => {
       sinon.restore()
     })
 
     it('uses an RPM that does not support boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(false)
-      await dependencies.forElectron('v1.0.0')
-      expect(console.warn.calledWithMatch(/^You are using RPM < 4.13/)).to.equal(true)
+      try {
+        await dependencies.forElectron('v1.0.0')
+      } catch (error) {
+        expect(error.message).to.match(/^You are using RPM < 4.13/)
+      }
     })
 
     it('uses an RPM that supports boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(true)
-      await dependencies.forElectron('v1.0.0')
-      expect(console.warn.calledWithMatch(/^You are using RPM < 4.13/)).to.equal(false)
+      try {
+        expect(await dependencies.forElectron('v1.0.0')).to.have.property('requires')
+      } catch (error) {
+        return expect(error).to.be.undefined
+      }
     })
   })
 
