@@ -36,12 +36,13 @@
     "debug": "^4.1.1",
     "electron-installer-common": "^0.7.3",
     "fs-extra": "^8.0.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.15",
     "word-wrap": "^1.2.3",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^6.2.2",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.0",

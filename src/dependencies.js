@@ -63,8 +63,7 @@ module.exports = {
       const trashRequires = trashRequiresAsBoolean(electronVersion, dependencyMap)
       return { requires: requires.concat(trashRequires) }
     } else {
-      console.warn("You are using RPM < 4.13, which does not support boolean dependencies. This is required to express the dependencies needed for the 'shell.moveItemToTrash' API.\nIf you do not use this API, you can safely ignore this warning.\nIf you do use this API, please upgrade to RPM 4.13 or above to have the trash dependencies added to your RPM's requires section.")
-      return { requires }
+      throw new Error('Please upgrade to RPM 4.13 or above, which supports boolean dependencies.\nThis is used to express Electron dependencies for a wide variety of RPM-using distributions.')
     }
   },
   rpmSupportsBooleanDependencies,
