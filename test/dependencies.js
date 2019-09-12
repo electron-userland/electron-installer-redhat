@@ -1,11 +1,9 @@
 const dependencies = require('../src/dependencies')
-const chai = require('chai')
+const { expect, use } = require('chai')
 const sinon = require('sinon')
 const chaiAsPromised = require('chai-as-promised')
 
-chai.use(chaiAsPromised)
-const { expect } = chai
-chai.should()
+use(chaiAsPromised)
 
 describe('dependencies', () => {
   describe('forElectron', () => {
@@ -15,12 +13,12 @@ describe('dependencies', () => {
 
     it('uses an RPM that does not support boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(false)
-      dependencies.forElectron('v1.0.0').should.be.rejectedWith(/^Please upgrade to RPM 4\.13/)
+      expect(dependencies.forElectron('v1.0.0')).to.eventually.be.rejectedWith(/^Please upgrade to RPM 4\.13/)
     })
 
     it('uses an RPM that supports boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(true)
-      dependencies.forElectron('v1.0.0').should.be.fulfilled // eslint-disable-line no-unused-expressions
+      expect(dependencies.forElectron('v1.0.0')).to.be.fulfilled // eslint-disable-line no-unused-expressions
     })
   })
 
