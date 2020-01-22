@@ -2,7 +2,19 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v2.0.0...master
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.0.0...master
+
+## [3.0.0] - 2020-01-22
+
+[3.0.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v2.0.0...v3.0.0
+
+### Added
+
+* Electron 8 dependency compatibility (electron-userland/electron-installer-common#45)
+
+### Removed
+
+* Node &lt; 10 support (#151)
 
 ## [2.0.0] - 2019-06-11
 
