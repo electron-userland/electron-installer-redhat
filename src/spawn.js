@@ -1,6 +1,6 @@
 'use strict'
 
-const { spawn } = require('electron-installer-common')
+const { spawn } = require('@malept/cross-spawn-promise')
 const which = require('which')
 
 function updateExecutableMissingException (err, updateError) {
