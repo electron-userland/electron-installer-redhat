@@ -16,7 +16,7 @@ describe('spawn', () => {
       await spawn('rpmbuild', ['--version'], msg => { })
       throw new Error('rpmbuild should not have been executed')
     } catch (error) {
-      chai.expect(error.message).to.match(/Error executing command \(Your system is missing the rpm/)
+      chai.expect(error.message).to.match(/Error executing command \(rpmbuild --version\):\nYour system is missing the rpm/)
     }
   })
 

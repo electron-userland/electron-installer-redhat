@@ -1,14 +1,11 @@
 'use strict'
 
 const access = require('./helpers/access')
-const childProcess = require('child_process')
 const { describeInstaller, tempOutputDir, testInstallerOptions } = require('./helpers/describe_installer')
 const fs = require('fs-extra')
 const installer = require('..')
 const path = require('path')
-const { promisify } = require('util')
-
-const exec = promisify(childProcess.exec)
+const { spawn } = require('@malept/cross-spawn-promise')
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))
@@ -139,8 +136,7 @@ describe('module', function () {
     'generates a `.rpm` package with scripts',
     async outputDir => {
       await assertNonASARRpmExists(outputDir)
-      let { stdout } = await exec('rpm -qp --scripts bartest.x86_64.rpm', { cwd: outputDir })
-      stdout = stdout.toString()
+      const stdout = await spawn('rpm', ['-qp', '--scripts', 'bartest.x86_64.rpm'], { cwd: outputDir })
       const scripts = ['preinstall', 'postinstall', 'preuninstall', 'postuninstall']
       if (!scripts.every(element => stdout.includes(element))) {
         throw new Error(`Some installation scripts are missing:\n ${stdout}`)

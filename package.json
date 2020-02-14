@@ -33,6 +33,7 @@
     "test": "npm run lint && npm run spec"
   },
   "dependencies": {
+    "@malept/cross-spawn-promise": "^1.0.0",
     "debug": "^4.1.1",
     "electron-installer-common": "^0.10.0",
     "fs-extra": "^8.1.0",
