@@ -22,6 +22,29 @@ describe('dependencies', () => {
     })
   })
 
+  describe('getRpmVersion', () => {
+    afterEach(() => {
+      sinon.restore()
+    })
+    it('parses version output from RPM < 4.15', async () => {
+      const versionOutput = 'RPM version 4.14.2.1\n'
+      const spawnProgram = sinon.stub().resolves(versionOutput)
+
+      const actualOutput = await dependencies.getRpmVersion(null, spawnProgram)
+
+      expect(actualOutput).to.equal('4.14.2.1')
+    })
+
+    it('parses version output from RPM >= 4.15', async () => {
+      const versionOutput = 'RPM-Version 4.15.1\n'
+      const spawnProgram = sinon.stub().resolves(versionOutput)
+
+      const actualOutput = await dependencies.getRpmVersion(null, spawnProgram)
+
+      expect(actualOutput).to.equal('4.15.1')
+    })
+  })
+
   describe('rpmVersionSupportsBooleanDependencies', () => {
     it('works with release candidates', () => {
       expect(dependencies.rpmVersionSupportsBooleanDependencies('4.13.0-rc1')).to.equal(true)
