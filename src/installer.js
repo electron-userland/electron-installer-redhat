@@ -54,23 +54,12 @@ class RedhatInstaller extends common.ElectronInstaller {
   }
 
   /**
-   * Creates macros file used by `rpmbuild`.
-   */
-  createMacros () {
-    const src = path.resolve(__dirname, '../resources/macros.ejs')
-    const dest = path.join(process.env.HOME, '.rpmmacros')
-    this.options.logger(`Creating macros file at ${dest}`)
-
-    return common.wrapError('creating macros file', async () => common.createTemplatedFile(src, dest, { dir: this.stagingDir, ...this.options }))
-  }
-
-  /**
    * Package everything using `rpmbuild`.
    */
   async createPackage () {
     this.options.logger(`Creating package at ${this.stagingDir}`)
 
-    const output = await spawn('rpmbuild', ['-bb', this.specPath, '--target', this.options.arch], this.options.logger)
+    const output = await spawn('rpmbuild', ['-bb', this.specPath, '--target', this.options.arch, '--define', `_topdir ${this.stagingDir}`], this.options.logger)
     this.options.logger(`rpmbuild output: ${output}`)
   }
 
@@ -176,7 +165,6 @@ module.exports = async data => {
   await installer.generateScripts()
   await data.logger(`Creating package with options\n${JSON.stringify(installer.options, null, 2)}`)
   await installer.createStagingDir()
-  await installer.createMacros()
   await installer.createContents()
   await installer.createPackage()
   await installer.movePackage()
