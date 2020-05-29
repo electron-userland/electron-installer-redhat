@@ -1,6 +1,7 @@
 'use strict'
 
 const common = require('electron-installer-common')
+const _ = require('lodash')
 const spawn = require('./spawn')
 
 const dependencyMap = {
@@ -26,8 +27,12 @@ const dependencyMap = {
  * dependencies (>= 4.13.0).
  */
 async function rpmSupportsBooleanDependencies (logger) {
-  const output = await spawn('rpmbuild', ['--version'], logger)
-  return rpmVersionSupportsBooleanDependencies(output.trim().split(' ')[2])
+  return rpmVersionSupportsBooleanDependencies(await getRpmVersion(logger))
+}
+
+async function getRpmVersion (logger) {
+  const versionOutput = await spawn('rpmbuild', ['--version'], logger)
+  return _.last(versionOutput.trim().split(' '))
 }
 
 /**
@@ -66,6 +71,7 @@ module.exports = {
       throw new Error('Please upgrade to RPM 4.13 or above, which supports boolean dependencies.\nThis is used to express Electron dependencies for a wide variety of RPM-using distributions.')
     }
   },
+  getRpmVersion,
   rpmSupportsBooleanDependencies,
   rpmVersionSupportsBooleanDependencies,
   trashRequiresAsBoolean
