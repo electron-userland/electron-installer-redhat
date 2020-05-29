@@ -1,7 +1,8 @@
+const chaiAsPromised = require('chai-as-promised')
 const dependencies = require('../src/dependencies')
 const { expect, use } = require('chai')
+const proxyquire = require('proxyquire').noPreserveCache()
 const sinon = require('sinon')
-const chaiAsPromised = require('chai-as-promised')
 
 use(chaiAsPromised)
 
@@ -13,35 +14,32 @@ describe('dependencies', () => {
 
     it('uses an RPM that does not support boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(false)
-      expect(dependencies.forElectron('v1.0.0')).to.eventually.be.rejectedWith(/^Please upgrade to RPM 4\.13/)
+      await expect(dependencies.forElectron('v1.0.0')).to.eventually.be.rejectedWith(/^Please upgrade to RPM 4\.13/)
     })
 
     it('uses an RPM that supports boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(true)
-      expect(dependencies.forElectron('v1.0.0')).to.be.fulfilled // eslint-disable-line no-unused-expressions
+      await expect(dependencies.forElectron('v1.0.0')).to.be.fulfilled // eslint-disable-line no-unused-expressions
     })
   })
 
   describe('getRpmVersion', () => {
-    afterEach(() => {
-      sinon.restore()
-    })
+    function stubGetRpmVersion (versionOutput) {
+      const { getRpmVersion } = proxyquire('../src/dependencies', {
+        './spawn': async () => Promise.resolve(versionOutput)
+      })
+
+      return getRpmVersion
+    }
+
     it('parses version output from RPM < 4.15', async () => {
-      const versionOutput = 'RPM version 4.14.2.1\n'
-      const spawnProgram = sinon.stub().resolves(versionOutput)
-
-      const actualOutput = await dependencies.getRpmVersion(null, spawnProgram)
-
-      expect(actualOutput).to.equal('4.14.2.1')
+      const getRpmVersion = stubGetRpmVersion('RPM version 4.14.2.1\n')
+      await expect(getRpmVersion(null)).to.eventually.equal('4.14.2.1')
     })
 
     it('parses version output from RPM >= 4.15', async () => {
-      const versionOutput = 'RPM-Version 4.15.1\n'
-      const spawnProgram = sinon.stub().resolves(versionOutput)
-
-      const actualOutput = await dependencies.getRpmVersion(null, spawnProgram)
-
-      expect(actualOutput).to.equal('4.15.1')
+      const getRpmVersion = stubGetRpmVersion('RPM-Version 4.15.1\n')
+      await expect(getRpmVersion(null)).to.eventually.equal('4.15.1')
     })
   })
 

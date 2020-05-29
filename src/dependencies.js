@@ -22,21 +22,17 @@ const dependencyMap = {
   xtst: '(libXtst or libXtst6)'
 }
 
-async function getRpmVersion (logger, spawnProgram = spawn) {
-  const versionOutput = await spawnProgram('rpmbuild', ['--version'], logger)
-
-  const parts = versionOutput.trim().split(' ')
-  const versionNumber = _.last(parts)
-
-  return versionNumber
-}
 /**
  * Retrieves the RPM version number and determines whether it has support for boolean
  * dependencies (>= 4.13.0).
  */
 async function rpmSupportsBooleanDependencies (logger) {
-  const versionNumber = await getRpmVersion(logger)
-  return module.exports.rpmVersionSupportsBooleanDependencies(versionNumber)
+  return rpmVersionSupportsBooleanDependencies(await getRpmVersion(logger))
+}
+
+async function getRpmVersion (logger) {
+  const versionOutput = await spawn('rpmbuild', ['--version'], logger)
+  return _.last(versionOutput.trim().split(' '))
 }
 
 /**
