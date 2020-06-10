@@ -25,6 +25,7 @@ const argv = yargs
     describe: 'JSON file that contains the metadata for your application',
     config: true
   })
+  .options('options.requires', { array: true, hidden: true })
   .options('options.execArguments', { array: true, hidden: true })
   .options('options.categories', { array: true, hidden: true })
   .options('options.mimeType', { array: true, hidden: true })
