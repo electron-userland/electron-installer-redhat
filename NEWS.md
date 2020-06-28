@@ -4,6 +4,20 @@
 
 [Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.0.0...master
 
+## [3.1.0] - 2020-06-28
+
+[3.1.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.0.0...v3.1.0
+
+### Added
+
+* Dependencies for Electron >= 9 (#156)
+
+### Fixed
+
+* Stop overwriting `~/.rpmmacros` (#160)
+* Handle parsing versions from RPM >= 4.15 (#162)
+* Define array options for CLI (#166)
+
 ## [3.0.0] - 2020-01-22
 
 [3.0.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v2.0.0...v3.0.0
