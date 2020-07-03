@@ -352,10 +352,14 @@ Or multiple images with their corresponding resolutions:
     '48x48': 'resources/Icon48.png',
     '64x64': 'resources/Icon64.png',
     '128x128': 'resources/Icon128.png',
-    '256x256': 'resources/Icon256.png'
+    '256x256': 'resources/Icon256.png',
+    'scalable': 'resources/Icon.svg',
+    'symbolic': 'resources/Icon-symbolic.svg',
   }
 }
 ```
+Note that the image files must be one of the types: PNG or SVG. The support for SVG works only on `scalable` or `symbolic` resolutions.
+
 
 #### options.categories
 Type: `Array[String]`

@@ -22,7 +22,9 @@ mkdir -p %{buildroot}/usr/
 /usr/lib/<%= name %>/
 /usr/share/applications/<%= name %>.desktop
 /usr/share/doc/<%= name %>/
-<% if (_.isObject(icon)) { %><% _.forEach(icon, function (path, resolution) { %>/usr/share/icons/hicolor/<%= resolution %>/apps/<%= name %>.<%= resolution === 'scalable' ? 'svg' : 'png' %>
+<% if (_.isObject(icon)) { %>
+  <% _.forEach(icon, function (path, resolution) { %>
+/usr/share/icons/hicolor/<%= resolution %>/apps/<%= name %><%= resolution === 'symbolic' ? '-symbolic' : '' %>.<%= ['scalable', 'symbolic'].includes(resolution) ? 'svg' : 'png' %>
 <% }) } else { %>/usr/share/pixmaps/<%= name %>.png
 <% } %>
 
