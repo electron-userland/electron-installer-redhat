@@ -358,7 +358,7 @@ Or multiple images with their corresponding resolutions:
   }
 }
 ```
-Note that the image files must be one of the types: PNG or SVG. The support for SVG works only on `scalable` or `symbolic` resolutions.
+Per the [icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-0.11.html), image files must either PNGs or SVGs. The SVG format can only be used for the `scalable` or `symbolic` resolutions.
 
 
 #### options.categories
