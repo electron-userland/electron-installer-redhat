@@ -352,10 +352,14 @@ Or multiple images with their corresponding resolutions:
     '48x48': 'resources/Icon48.png',
     '64x64': 'resources/Icon64.png',
     '128x128': 'resources/Icon128.png',
-    '256x256': 'resources/Icon256.png'
+    '256x256': 'resources/Icon256.png',
+    'scalable': 'resources/Icon.svg',
+    'symbolic': 'resources/Icon-symbolic.svg',
   }
 }
 ```
+Per the [icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-0.11.html), image files must either PNGs or SVGs. The SVG format can only be used for the `scalable` or `symbolic` resolutions.
+
 
 #### options.categories
 Type: `Array[String]`
