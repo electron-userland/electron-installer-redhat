@@ -1,21 +1,26 @@
-<% if (name) { %>Name: <%= name %>
-<% } %><% if (version) { %>Version: <%= version %>
-<% } %><% if (revision) { %>Release: <%= revision %>%{?dist}
-<% } %><% if (description) { %>Summary: <%= description %>
-<% } %><% if (homepage) { %>URL: <%= homepage %>
-<% } %><% if (license) { %>License: <%= license %>
-<% } %>
-AutoReqProv: no
-<% if (requires) { %>Requires: <%= requires.join(', ') %>
-<% } %><% if (productDescription) { %>
-%description
-<%= productDescription %>
-<% } %>
 %define _binary_payload w<%= compressionLevel %>.xzdio
+
+Name: <%= name %>
+Version: <%= version %>
+Release: <%= revision %>%{?dist}
+<% if (description) { %>Summary: <%= description %><% } %>
+
+<% if (license) { %>License: <%= license %><% } %>
+<% if (homepage) { %>URL: <%= homepage %><% } %>
+
+Requires: <%= requires.join(', ') %>
+AutoReqProv: no
+
+
+<% if (productDescription) {
+  %>%description
+<%= productDescription %><% } %>
+
 
 %install
 mkdir -p %{buildroot}/usr/
-<% if (process.platform != 'darwin') { %>cp -r usr/* %{buildroot}/usr/<% } else { %>cp -R usr/* %{buildroot}/usr/<% } %>
+<%= process.platform === 'darwin' ? 'cp -R usr/* %{buildroot}/usr/' : 'cp -r usr/* %{buildroot}/usr/' %>
+
 
 %files
 /usr/bin/<%= name %>
@@ -29,18 +34,21 @@ mkdir -p %{buildroot}/usr/
   %>/usr/share/pixmaps/<%= name %>.png
 <% } %>
 
-<% if (pre) { %>
-%pre
+<% if (pre) {
+  %>%pre
 <%= pre %><% } %>
 
-<% if (preun) { %>
-%preun
+
+<% if (preun) {
+  %>%preun
 <%= preun %><% } %>
 
-<% if (post) { %>
-%post
+
+<% if (post) {
+  %>%post
 <%= post %><% } %>
 
-<% if (postun) { %>
-%postun
+
+<% if (postun) {
+  %>%postun
 <%= postun %><% } %>
