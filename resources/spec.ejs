@@ -3,21 +3,23 @@
 Name: <%= name %>
 Version: <%= version %>
 Release: <%= revision %>%{?dist}
-<% if (description) { %>Summary: <%= description %><% } %>
+<% if (description) { print(`Summary: ${description}\n`) }
+%>
+<% if (license) { print(`License: ${license}\n`) }
+if (homepage) { print(`URL: ${homepage}\n`) }
+if (license || homepage) { print('\n') }
 
-<% if (license) { %>License: <%= license %><% } %>
-<% if (homepage) { %>URL: <%= homepage %><% } %>
-
-Requires: <%= requires.join(', ') %>
+%>Requires: <%= requires.join(', ') %>
 AutoReqProv: no
 
 
 <% if (productDescription) {
-  %>%description
-<%= productDescription %><% } %>
+%>%description
+<% print(productDescription)
+print('\n\n\n') }
 
 
-%install
+%>%install
 mkdir -p %{buildroot}/usr/
 <%= process.platform === 'darwin' ? 'cp -R usr/* %{buildroot}/usr/' : 'cp -r usr/* %{buildroot}/usr/' %>
 
@@ -36,19 +38,22 @@ mkdir -p %{buildroot}/usr/
 
 <% if (pre) {
   %>%pre
-<%= pre %><% } %>
+<% print(pre)
+if (preun || post || postun) print('\n\n\n') }
 
 
-<% if (preun) {
+%><% if (preun) {
   %>%preun
-<%= preun %><% } %>
+<% print(preun)
+if (post || postun) print('\n\n\n') }
 
 
-<% if (post) {
+%><% if (post) {
   %>%post
-<%= post %><% } %>
+<% print(post)
+if (postun) print('\n\n\n') }
 
 
-<% if (postun) {
+%><% if (postun) {
   %>%postun
-<%= postun %><% } %>
+<% print(postun) } %>

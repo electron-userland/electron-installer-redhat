@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=<%= productName %>
-<% if (description) { %>Comment=<%= description %><% } %>
-GenericName=<%= genericName %>
+<% if (description) { print(`Comment=${description}\n`) }
+%>GenericName=<%= genericName %>
 Exec=<%= name %> %U<% if (execArguments && execArguments.length) { %> <%= execArguments.join(' ') %><% } %>
 Icon=<%= name %>
 Type=Application
