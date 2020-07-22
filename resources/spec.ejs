@@ -21,7 +21,7 @@ print('\n\n\n') }
 
 %>%install
 mkdir -p %{buildroot}/usr/
-<%= process.platform === 'darwin' ? 'cp -R usr/* %{buildroot}/usr/' : 'cp -r usr/* %{buildroot}/usr/' %>
+cp <%= process.platform === 'darwin' ? '-R' : '-r' %> usr/* %{buildroot}/usr/
 
 
 %files
