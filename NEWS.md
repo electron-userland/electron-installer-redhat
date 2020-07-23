@@ -14,7 +14,7 @@
 
 ### Fixed
 
-* Conformance to RPM spec formatting guidelines (#171) (see [SpecFormattingGuidelines](https://fedoraproject.org/wiki/PeterGordon/SpecFormattingGuidelines))
+* Conformance to [RPM spec formatting guidelines](https://fedoraproject.org/wiki/PeterGordon/SpecFormattingGuidelines) (#171)
 
 ## [3.1.0] - 2020-06-28
 
