@@ -2,7 +2,19 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.0.0...master
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.2.0...master
+
+## [3.2.0] - 2020-07-23
+
+[3.2.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.1.0...v3.2.0
+
+### Added
+
+* Support for scalable and symbolic icons (#169)
+
+### Fixed
+
+* Conformance to [RPM spec formatting guidelines](https://fedoraproject.org/wiki/PeterGordon/SpecFormattingGuidelines) (#171)
 
 ## [3.1.0] - 2020-06-28
 
