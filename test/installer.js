@@ -6,6 +6,7 @@ const fs = require('fs-extra')
 const installer = require('..')
 const path = require('path')
 const { spawn } = require('@malept/cross-spawn-promise')
+const os = require('os')
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))
@@ -142,6 +143,39 @@ describe('module', function () {
       if (!scripts.every(element => stdout.includes(element))) {
         throw new Error(`Some installation scripts are missing:\n ${stdout}`)
       }
+    }
+  )
+
+  describeInstaller(
+    'with an app with default %_target_os',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        arch: 'x86'
+      }
+    },
+    'generates a `.rpm` package with default %_target_os',
+    async outputDir => {
+      await assertASARRpmExists(outputDir)
+      const stdout = await spawn('rpm', ['-qp', '--qf', '\'%{OS}\'', 'footest.x86.rpm'], { cwd: outputDir })
+      return stdout === os.platform()
+    }
+  )
+
+  describeInstaller(
+    'with an app with %_target_os linux',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        arch: 'x86',
+        os: 'linux'
+      }
+    },
+    'generates a `.rpm` package with linux %_target_os',
+    async outputDir => {
+      await assertASARRpmExists(outputDir)
+      const stdout = await spawn('rpm', ['-qp', '--qf', '\'%{OS}\'', 'footest.x86.rpm'], { cwd: outputDir })
+      return stdout === 'linux'
     }
   )
 })
