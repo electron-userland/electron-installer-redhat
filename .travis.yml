@@ -1,18 +1,12 @@
 language: node_js
-matrix:
-  include:
-    - os: linux
-      dist: bionic
-      node_js: '10'
-    - os: linux
-      dist: bionic
-      node_js: '12'
-    - os: osx
-      osx_image: xcode12
-      node_js: '10'
-    - os: osx
-      osx_image: xcode12
-      node_js: '12'
+os:
+- linux
+- osx
+node_js:
+- '10'
+- '12'
+dist: bionic
+osx_image: xcode12
 cache:
   directories:
   - node_modules
