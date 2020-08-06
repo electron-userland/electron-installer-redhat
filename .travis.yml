@@ -1,8 +1,12 @@
 language: node_js
+os:
+- linux
+- osx
 node_js:
-- '12'
 - '10'
+- '12'
 dist: bionic
+osx_image: xcode12
 cache:
   directories:
   - node_modules
@@ -14,6 +18,9 @@ env:
 - DEBUG="electron-installer-redhat"
 addons:
   apt:
+    packages:
+    - rpm
+  homebrew:
     packages:
     - rpm
 deploy:
