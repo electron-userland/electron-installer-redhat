@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...master
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...main
 
 ## [3.3.0] - 2021-02-05
 
