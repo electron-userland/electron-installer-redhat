@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.2.0...master
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...master
+
+## [3.3.0] - 2021-02-05
+
+[3.3.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.2.0...v3.3.0
+
+### Added
+
+* Support for OpenSuse Leap dependencies (#182)
 
 ## [3.2.0] - 2020-07-23
 
