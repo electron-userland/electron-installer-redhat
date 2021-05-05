@@ -59,7 +59,7 @@ class RedhatInstaller extends common.ElectronInstaller {
   async createPackage () {
     this.options.logger(`Creating package at ${this.stagingDir}`)
 
-    const output = await spawn('rpmbuild', ['-bb', this.specPath, '--target', this.options.arch, '--define', `_topdir ${this.stagingDir}`], this.options.logger)
+    const output = await spawn('rpmbuild', ['-bb', this.specPath, '--target', `${this.options.arch}-${this.options.vendor}-${this.options.os}`, '--define', `_topdir ${this.stagingDir}`], this.options.logger)
     this.options.logger(`rpmbuild output: ${output}`)
   }
 
@@ -126,6 +126,9 @@ class RedhatInstaller extends common.ElectronInstaller {
     this.options.requires = common.mergeUserSpecified(this.userSupplied, 'requires', this.defaults)
 
     this.normalizeVersion()
+
+    this.options.vendor = 'none'
+    this.options.os = this.options.os || process.platform
   }
 
   /**

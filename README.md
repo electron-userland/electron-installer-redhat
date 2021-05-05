@@ -275,6 +275,12 @@ Default: `undefined`
 
 Machine architecture the package is targeted to, used to set the `--target` option.
 
+#### options.os
+Type: `String`
+Default: Operating system platform of the host machine
+
+Operating system platform the package is targeted to, used to set the `--target` option.
+
 #### options.requires
 Type: `Array[String]`
 Default: The minimum list of packages needed for Electron to run
