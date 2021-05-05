@@ -6,7 +6,6 @@ const fs = require('fs-extra')
 const installer = require('..')
 const path = require('path')
 const { spawn } = require('@malept/cross-spawn-promise')
-const os = require('os')
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))
@@ -157,25 +156,31 @@ describe('module', function () {
     'generates a `.rpm` package with default %_target_os',
     async outputDir => {
       await assertASARRpmExists(outputDir)
-      const stdout = await spawn('rpm', ['-qp', '--qf', '\'%{OS}\'', 'footest.x86.rpm'], { cwd: outputDir })
-      return stdout === os.platform()
+      const stdout = await spawn('rpm', ['-qp', '--qf', '%{OS}', 'footest.x86.rpm'], { cwd: outputDir })
+      if (stdout !== process.platform) {
+        throw new Error(`RPM built with wrong platform: ${stdout}`)
+      }
     }
   )
 
-  describeInstaller(
-    'with an app with %_target_os linux',
-    {
-      src: 'test/fixtures/app-with-asar/',
-      options: {
-        arch: 'x86',
-        os: 'linux'
+  if (process.platform === 'darwin') {
+    describeInstaller(
+      'with an app with %_target_os linux',
+      {
+        src: 'test/fixtures/app-with-asar/',
+        options: {
+          arch: 'x86',
+          os: 'linux'
+        }
+      },
+      'generates a `.rpm` package with linux %_target_os',
+      async outputDir => {
+        await assertASARRpmExists(outputDir)
+        const stdout = await spawn('rpm', ['-qp', '--qf', '%{OS}', 'footest.x86.rpm'], { cwd: outputDir })
+        if (stdout !== 'linux') {
+          throw new Error(`RPM was not built for linux: ${stdout}`)
+        }
       }
-    },
-    'generates a `.rpm` package with linux %_target_os',
-    async outputDir => {
-      await assertASARRpmExists(outputDir)
-      const stdout = await spawn('rpm', ['-qp', '--qf', '\'%{OS}\'', 'footest.x86.rpm'], { cwd: outputDir })
-      return stdout === 'linux'
-    }
-  )
+    )
+  }
 })
