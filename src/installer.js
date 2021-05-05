@@ -6,7 +6,6 @@ const debug = require('debug')
 const fs = require('fs-extra')
 const path = require('path')
 const wrap = require('word-wrap')
-const os = require('os')
 
 const redhatDependencies = require('./dependencies')
 const spawn = require('./spawn')
@@ -129,7 +128,7 @@ class RedhatInstaller extends common.ElectronInstaller {
     this.normalizeVersion()
 
     this.options.vendor = 'none'
-    this.options.os = this.options.os || os.platform()
+    this.options.os = this.options.os || process.platform
   }
 
   /**
