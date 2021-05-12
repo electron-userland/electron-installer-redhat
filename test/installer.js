@@ -170,7 +170,7 @@ describe('module', function () {
         src: 'test/fixtures/app-with-asar/',
         options: {
           arch: 'x86',
-          os: 'linux'
+          platform: 'linux'
         }
       },
       'generates a `.rpm` package with linux %_target_os',

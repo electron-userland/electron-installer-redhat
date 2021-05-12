@@ -275,11 +275,11 @@ Default: `undefined`
 
 Machine architecture the package is targeted to, used to set the `--target` option.
 
-#### options.os
+#### options.platform
 Type: `String`
-Default: Operating system platform of the host machine
+Default: Operating system platform of the host machine. For possible values see Node.js [process.platform](https://nodejs.org/api/process.html#process_process_platform)
 
-Operating system platform the package is targeted to, used to set the `--target` option.
+Operating system platform the package is targeted to, used to set the [`--target`](https://linux.die.net/man/8/rpmbuild) option.
 
 #### options.requires
 Type: `Array[String]`
