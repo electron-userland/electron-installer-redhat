@@ -51,7 +51,7 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
-    "husky": "^6.0.0",
+    "husky": "^7.0.4",
     "lint-staged": "^10.2.7",
     "mocha": "^8.0.1",
     "promise-retry": "^2.0.1",
