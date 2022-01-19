@@ -163,6 +163,25 @@ describe('module', function () {
     }
   )
 
+  describeInstaller(
+    'with an app with a custom SPEC file',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        arch: 'x86',
+        specTemplate: 'test/fixtures/custom.spec.ejs'
+      }
+    },
+    'generates a `.rpm` package with custom spec',
+    async outputDir => {
+      await assertASARRpmExists(outputDir)
+      const stdout = await spawn('rpm', ['-qp', '--changelog', 'footest.x86.rpm'], { cwd: outputDir })
+      if (!stdout.includes('* Wed Feb 02 2022 John Doe <johndoe@johndoe.com> - 0.1\n- First release')) {
+        throw new Error(`RPM missing changelog:\n ${stdout}`)
+      }
+    }
+  )
+
   if (process.platform === 'darwin') {
     describeInstaller(
       'with an app with %_target_os linux',

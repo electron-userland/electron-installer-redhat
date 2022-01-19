@@ -37,6 +37,10 @@ class RedhatInstaller extends common.ElectronInstaller {
     return path.resolve(__dirname, '../resources/desktop.ejs')
   }
 
+  get defaultSpecTemplatePath () {
+    return path.resolve(__dirname, '../resources/spec.ejs')
+  }
+
   get packagePattern () {
     return path.join(this.stagingDir, 'RPMS', this.options.arch, '*.rpm')
   }
@@ -69,7 +73,7 @@ class RedhatInstaller extends common.ElectronInstaller {
    * See: https://fedoraproject.org/wiki/How_to_create_an_RPM_package
    */
   async createSpec () {
-    const src = path.resolve(__dirname, '../resources/spec.ejs')
+    const src = this.options.specTemplate || this.defaultSpecTemplatePath
     this.options.logger(`Creating spec file at ${this.specPath}`)
 
     return common.wrapError('creating spec file', async () => this.createTemplatedFile(src, this.specPath))
