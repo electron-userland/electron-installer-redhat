@@ -1,6 +1,6 @@
 %define _binary_payload w<%= compressionLevel %>.xzdio
 
-%if "%{_host_cpu}" != "${_target_cpu}"
+%if "%{_host_cpu}" != "%{_target_cpu}"
 %global __strip /bin/true
 %endif
 
