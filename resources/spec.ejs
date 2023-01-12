@@ -1,5 +1,9 @@
 %define _binary_payload w<%= compressionLevel %>.xzdio
 
+%if "%{_host_cpu}" != "${_target_cpu}"
+%global __strip /bin/true
+%endif
+
 Name: <%= name %>
 Version: <%= version %>
 Release: <%= revision %>%{?dist}
