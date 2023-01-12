@@ -7,7 +7,7 @@
 
 ## Requirements
 
-This tool requires Node 10 or greater and `rpmbuild` 4.13 or greater to build the `.rpm` package.
+This tool requires Node 12 or greater and `rpmbuild` 4.13 or greater to build the `.rpm` package.
 
 **Note**: RPM 4.13.0 or greater is required due to the [boolean dependency feature](http://rpm.org/user_doc/boolean_dependencies.html).
 
