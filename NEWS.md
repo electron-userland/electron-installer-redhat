@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...main
+[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.4.0...main
+
+## [3.4.0] - 2023-02-28
+
+[3.4.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...v3.4.0
+
+### Fixed
+
+* Skip stripping when making RPM for different architecture (#325)
 
 ## [3.3.0] - 2021-02-05
 
