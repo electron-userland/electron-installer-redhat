@@ -8,6 +8,10 @@
 
 [3.4.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...v3.4.0
 
+### Added
+
+* Add options.platform to set %_target_os (#175, #196)
+
 ### Fixed
 
 * Skip stripping when making RPM for different architecture (#325)
