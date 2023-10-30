@@ -407,6 +407,12 @@ Default: [`resources/desktop.ejs`](https://github.com/electron-userland/electron
 
 The absolute path to a custom template for the generated [FreeDesktop.org desktop entry](http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html) file.
 
+#### options.specTemplate
+Type: `String`
+Default: [`resources/spec.ejs`](https://github.com/electron-userland/electron-installer-redhat/blob/main/resources/spec.ejs)
+
+The absolute path to a custom template for the generated [SPEC file](https://rpm-packaging-guide.github.io/#what-is-a-spec-file).
+
 ## Meta
 
 * Code: `git clone git://github.com/electron-userland/electron-installer-redhat.git`
