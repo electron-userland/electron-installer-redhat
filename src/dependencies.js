@@ -6,7 +6,7 @@ const spawn = require('./spawn')
 
 const dependencyMap = {
   atspi: 'at-spi2-core',
-  drm: 'libdrm',
+  drm: '(libdrm or libdrm2)',
   gbm: '(mesa-libgbm or libgbm1)',
   gconf: 'GConf2',
   glib2: 'glib2',
