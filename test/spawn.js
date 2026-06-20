@@ -13,7 +13,7 @@ describe('spawn', () => {
 
   it('should throw a human-friendly error when it cannot find rpmbuild', async () => {
     try {
-      await spawn('rpmbuild', ['--version'], msg => { })
+      await spawn('rpmbuild', ['--version'], () => { })
       throw new Error('rpmbuild should not have been executed')
     } catch (error) {
       chai.expect(error.message).to.match(/Error executing command \(rpmbuild --version\):\nYour system is missing the rpm/)

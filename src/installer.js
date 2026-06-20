@@ -12,7 +12,7 @@ const util = require('./util')
 
 const defaultLogger = debug('electron-installer-redhat')
 
-const defaultRename = function (dest, src) {
+const defaultRename = function (dest) {
   return path.join(dest, '<%= name %>-<%= version %>-<%= revision %>.<%= arch %>.rpm')
 }
 
