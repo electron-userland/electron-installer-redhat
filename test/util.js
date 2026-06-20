@@ -2,7 +2,7 @@ const { expect } = require('chai')
 const { replaceInvalidVersionCharacters } = require('../src/util')
 
 describe('private utility functions', function () {
-  describe('replaceInvalidVersionCharacters', function (test) {
+  describe('replaceInvalidVersionCharacters', function () {
     [{
       input: '1.2.3',
       expectedOutput: '1.2.3'

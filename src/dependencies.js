@@ -1,7 +1,6 @@
 'use strict'
 
 const common = require('electron-installer-common')
-const _ = require('lodash')
 const spawn = require('./spawn')
 
 const dependencyMap = {
@@ -35,7 +34,7 @@ async function rpmSupportsBooleanDependencies (logger) {
 
 async function getRpmVersion (logger) {
   const versionOutput = await spawn('rpmbuild', ['--version'], logger)
-  return _.last(versionOutput.trim().split(' '))
+  return versionOutput.trim().split(' ').at(-1)
 }
 
 /**
