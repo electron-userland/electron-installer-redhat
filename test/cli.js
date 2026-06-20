@@ -1,7 +1,7 @@
 'use strict'
 
-const fs = require('fs-extra')
-const path = require('path')
+const fs = require('node:fs/promises')
+const path = require('node:path')
 
 const access = require('./helpers/access')
 const describeInstaller = require('./helpers/describe_installer')
@@ -24,7 +24,7 @@ function runCLI (options) {
 describe('cli', function () {
   this.timeout(10000)
 
-  describe('with an app with asar', test => {
+  describe('with an app with asar', () => {
     const outputDir = tempOutputDir()
 
     runCLI({ src: 'test/fixtures/app-with-asar/', dest: outputDir, arch: 'x86' })
@@ -34,13 +34,13 @@ describe('cli', function () {
     cleanupOutputDir(outputDir)
   })
 
-  describe('with an app without asar', test => {
+  describe('with an app without asar', () => {
     const outputDir = tempOutputDir()
 
     runCLI({ src: 'test/fixtures/app-without-asar/', dest: outputDir, arch: 'x86_64' })
 
     it('generates a `.rpm` package', () => access(path.join(outputDir, 'bartest-0.0.1-1.x86_64.rpm')))
 
-    after(() => fs.remove(outputDir))
+    after(() => fs.rm(outputDir, { recursive: true, force: true }))
   })
 })

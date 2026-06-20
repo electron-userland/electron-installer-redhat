@@ -4,6 +4,11 @@
 
 [Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.4.0...main
 
+### Removed
+
+* Node < 22 support
+* `fs-extra` and `lodash` dependencies, in favor of Node builtins
+
 ## [3.4.0] - 2023-02-28
 
 [3.4.0]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.3.0...v3.4.0
