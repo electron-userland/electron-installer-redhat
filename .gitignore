@@ -2,4 +2,12 @@
 /example/node_modules/
 /node_modules/
 package-lock.json
-yarn.lock
+
+# yarn v4
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
