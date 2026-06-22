@@ -32,6 +32,13 @@ async function rpmSupportsBooleanDependencies (logger) {
   return rpmVersionSupportsBooleanDependencies(await getRpmVersion(logger))
 }
 
+/**
+ * Retrieves the RPM version number and determines the path to the `usr` directory based on the version.
+ */
+async function getRpmUsrPath (logger) {
+  return rpmUsrPath(await getRpmVersion(logger))
+}
+
 async function getRpmVersion (logger) {
   const versionOutput = await spawn('rpmbuild', ['--version'], logger)
   return versionOutput.trim().split(' ').at(-1)
@@ -45,6 +52,14 @@ async function getRpmVersion (logger) {
 function rpmVersionSupportsBooleanDependencies (rpmVersionString) {
   const rpmVersion = rpmVersionString.split('.').slice(0, 3).map(n => parseInt(n))
   return rpmVersion >= [4, 13, 0]
+}
+
+/**
+ * Determines the path to the `usr` directory based on the RPM version.
+ */
+function rpmUsrPath (rpmVersionString) {
+  const rpmVersion = rpmVersionString.split('.').slice(0, 3).map(n => parseInt(n))
+  return rpmVersion >= [4, 20, 0] ? '../usr/.' : 'usr/*'
 }
 
 /**
@@ -74,6 +89,7 @@ module.exports = {
     }
   },
   getRpmVersion,
+  getRpmUsrPath,
   rpmSupportsBooleanDependencies,
   rpmVersionSupportsBooleanDependencies,
   trashRequiresAsBoolean

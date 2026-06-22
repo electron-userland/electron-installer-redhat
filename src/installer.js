@@ -90,6 +90,7 @@ class RedhatInstaller extends common.ElectronInstaller {
     ])
     this.defaults = {
       ...common.getDefaultsFromPackageJSON(pkg, { revision: 1 }),
+      usrPath: await redhatDependencies.getRpmUsrPath(this.userSupplied.logger),
       version: pkg.version || '0.0.0',
       license: pkg.license,
       compressionLevel: 2,
