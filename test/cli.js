@@ -1,3 +1,4 @@
+import { after, before, describe, it } from 'node:test'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -16,8 +17,7 @@ function runCLI (options) {
   before(() => spawn('./src/cli.js', args))
 }
 
-describe('cli', function () {
-  this.timeout(10000)
+describe('cli', () => {
 
   describe('with an app with asar', () => {
     const outputDir = tempOutputDir()

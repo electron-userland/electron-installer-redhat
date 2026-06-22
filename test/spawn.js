@@ -1,4 +1,5 @@
-import chai from 'chai'
+import { after, before, describe, it } from 'node:test'
+import { expect } from 'chai'
 
 import spawn from '../src/spawn.js'
 
@@ -15,7 +16,7 @@ describe('spawn', () => {
       await spawn('rpmbuild', ['--version'], () => { })
       throw new Error('rpmbuild should not have been executed')
     } catch (error) {
-      chai.expect(error.message).to.match(/Error executing command \(rpmbuild --version\):\nYour system is missing the rpm/)
+      expect(error.message).to.match(/Error executing command \(rpmbuild --version\):\nYour system is missing the rpm/)
     }
   })
 

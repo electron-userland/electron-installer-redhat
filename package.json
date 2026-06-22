@@ -28,10 +28,11 @@
   "exports": "./src/installer.js",
   "bin": "src/cli.js",
   "scripts": {
+    "coverage": "node --test --experimental-test-coverage test/*.js",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "prepare": "husky install",
-    "spec": "mocha",
+    "spec": "node --test test/*.js",
     "test": "yarn lint && yarn spec"
   },
   "dependencies": {
@@ -43,10 +44,9 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "chai": "^4.5.0",
+    "chai": "^6.2.0",
     "husky": "^6.0.0",
     "lint-staged": "^10.2.7",
-    "mocha": "^10.8.2",
     "oxlint": "^1.59.0",
     "promise-retry": "^2.0.1",
     "sinon": "^11.1.0",

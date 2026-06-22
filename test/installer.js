@@ -1,3 +1,4 @@
+import { after, before, describe, it } from 'node:test'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -25,8 +26,7 @@ const recreateDir = async dir => {
   await fs.mkdir(dir, { recursive: true })
 }
 
-describe('module', function () {
-  this.timeout(10000)
+describe('module', () => {
 
   describeInstaller(
     'with an app with asar',
