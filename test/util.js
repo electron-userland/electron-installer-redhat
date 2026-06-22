@@ -1,5 +1,7 @@
-const { expect } = require('chai')
-const { replaceInvalidVersionCharacters } = require('../src/util')
+import { describe, it } from 'node:test'
+import { expect } from 'chai'
+
+import { replaceInvalidVersionCharacters } from '../src/util.js'
 
 describe('private utility functions', function () {
   describe('replaceInvalidVersionCharacters', function () {

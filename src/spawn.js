@@ -1,7 +1,5 @@
-'use strict'
-
-const { spawn } = require('@malept/cross-spawn-promise')
-const which = require('which')
+import { spawn as crossSpawn } from '@malept/cross-spawn-promise'
+import which from 'which'
 
 function updateExecutableMissingException (err, updateError) {
   if (updateError && err.code === 'ENOENT' && err.syscall === 'spawn rpmbuild') {
@@ -21,8 +19,8 @@ function updateExecutableMissingException (err, updateError) {
   }
 }
 
-module.exports = function (cmd, args, logger) {
-  return spawn(cmd, args, {
+export default function spawn (cmd, args, logger) {
+  return crossSpawn(cmd, args, {
     logger,
     updateErrorCallback: updateExecutableMissingException
   })
