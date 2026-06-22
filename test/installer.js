@@ -1,11 +1,12 @@
-'use strict'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
-const access = require('./helpers/access')
-const { describeInstaller, tempOutputDir, testInstallerOptions } = require('./helpers/describe_installer')
-const fs = require('node:fs/promises')
-const installer = require('..')
-const path = require('node:path')
-const { spawn } = require('@malept/cross-spawn-promise')
+import { spawn } from '@malept/cross-spawn-promise'
+
+import installer from '../src/installer.js'
+
+import access from './helpers/access.js'
+import { describeInstaller, tempOutputDir, testInstallerOptions } from './helpers/describe_installer.js'
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))

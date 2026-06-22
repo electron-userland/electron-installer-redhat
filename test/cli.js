@@ -1,14 +1,9 @@
-'use strict'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
-const fs = require('node:fs/promises')
-const path = require('node:path')
-
-const access = require('./helpers/access')
-const describeInstaller = require('./helpers/describe_installer')
-const spawn = require('../src/spawn')
-
-const tempOutputDir = describeInstaller.tempOutputDir
-const cleanupOutputDir = describeInstaller.cleanupOutputDir
+import access from './helpers/access.js'
+import { cleanupOutputDir, tempOutputDir } from './helpers/describe_installer.js'
+import spawn from '../src/spawn.js'
 
 function runCLI (options) {
   const args = [

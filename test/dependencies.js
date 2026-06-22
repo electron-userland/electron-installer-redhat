@@ -1,10 +1,9 @@
-const chaiAsPromised = require('chai-as-promised')
-const dependencies = require('../src/dependencies')
-const { expect, use } = require('chai')
-const proxyquire = require('proxyquire').noPreserveCache()
-const sinon = require('sinon')
+import assert from 'node:assert'
 
-use(chaiAsPromised)
+import { expect } from 'chai'
+import sinon from 'sinon'
+
+import dependencies from '../src/dependencies.js'
 
 describe('dependencies', () => {
   describe('forElectron', () => {
@@ -14,32 +13,28 @@ describe('dependencies', () => {
 
     it('uses an RPM that does not support boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(false)
-      await expect(dependencies.forElectron('v1.0.0')).to.eventually.be.rejectedWith(/^Please upgrade to RPM 4\.13/)
+      await assert.rejects(dependencies.forElectron('v1.0.0'), /^Error: Please upgrade to RPM 4\.13/)
     })
 
     it('uses an RPM that supports boolean dependencies', async () => {
       sinon.stub(dependencies, 'rpmSupportsBooleanDependencies').resolves(true)
-      await expect(dependencies.forElectron('v1.0.0')).to.be.fulfilled // eslint-disable-line no-unused-expressions
+      await assert.doesNotReject(dependencies.forElectron('v1.0.0'))
     })
   })
 
   describe('getRpmVersion', () => {
-    function stubGetRpmVersion (versionOutput) {
-      const { getRpmVersion } = proxyquire('../src/dependencies', {
-        './spawn': async () => Promise.resolve(versionOutput)
-      })
+    it('returns the version of the installed rpmbuild', async () => {
+      expect(await dependencies.getRpmVersion(null)).to.match(/^\d+(\.\d+)+/)
+    })
+  })
 
-      return getRpmVersion
-    }
-
-    it('parses version output from RPM < 4.15', async () => {
-      const getRpmVersion = stubGetRpmVersion('RPM version 4.14.2.1\n')
-      await expect(getRpmVersion(null)).to.eventually.equal('4.14.2.1')
+  describe('parseRpmVersionOutput', () => {
+    it('parses version output from RPM < 4.15', () => {
+      expect(dependencies.parseRpmVersionOutput('RPM version 4.14.2.1\n')).to.equal('4.14.2.1')
     })
 
-    it('parses version output from RPM >= 4.15', async () => {
-      const getRpmVersion = stubGetRpmVersion('RPM-Version 4.15.1\n')
-      await expect(getRpmVersion(null)).to.eventually.equal('4.15.1')
+    it('parses version output from RPM >= 4.15', () => {
+      expect(dependencies.parseRpmVersionOutput('RPM-Version 4.15.1\n')).to.equal('4.15.1')
     })
   })
 

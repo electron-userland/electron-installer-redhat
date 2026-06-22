@@ -1,12 +1,10 @@
-'use strict'
-
-const fs = require('node:fs/promises')
-const retry = require('promise-retry')
+import fs from 'node:fs/promises'
+import retry from 'promise-retry'
 
 /**
  * `fs.access` which retries three times.
  */
-module.exports = function (path) {
+export default function access (path) {
   return retry(retry => {
     return fs.access(path)
       .catch(retry)
