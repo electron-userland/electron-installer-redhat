@@ -11,6 +11,8 @@
 
 ### Changed
 
+* `libsecret` is now part of the default `Requires`, since Electron's `safeStorage` API uses it
+* Generated desktop entries now include `Terminal=false` and `StartupWMClass`
 * The package is now an ES module: use `import` instead of `require` (CommonJS consumers on
   Node.js >= 22.12 can use `require('electron-installer-redhat').default`)
 * Switched package management to Yarn 4
