@@ -5,6 +5,8 @@ Name=<%= productName %>
 Exec=<%= name %> %U<% if (execArguments && execArguments.length) { %> <%= execArguments.join(' ') %><% } %>
 Icon=<%= name %>
 Type=Application
+Terminal=false
+StartupWMClass=<%= productName %>
 StartupNotify=true
 Categories=<%= categories.join(';') %>;
 <% if (mimeType.length) { %>MimeType=<%= mimeType.join(';') %>;<% } %>

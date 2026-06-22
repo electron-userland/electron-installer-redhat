@@ -30,7 +30,7 @@ const dependencies = {
    * The dependencies for Electron itself, given an Electron version.
    */
   forElectron: async function dependenciesForElectron (electronVersion, logger) {
-    const requires = common.getDepends(electronVersion, dependencyMap)
+    const requires = common.getDepends(electronVersion, dependencyMap).concat(['libsecret'])
     if (await dependencies.rpmSupportsBooleanDependencies(logger)) {
       const trashRequires = dependencies.trashRequiresAsBoolean(electronVersion, dependencyMap)
       return { requires: requires.concat(trashRequires) }
