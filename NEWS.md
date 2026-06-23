@@ -1,8 +1,9 @@
 # `electron-installer-redhat` - Changes by Version
 
-## [Unreleased]
+## New Release Notes on GitHub Releases
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.4.0...main
+Release notes for new releases are now on [GitHub Releases](https://github.com/electron-userland/electron-installer-redhat/releases)
+for the repository.
 
 ### Removed
 
