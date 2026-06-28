@@ -51,6 +51,12 @@ describe('dependencies', () => {
     it('works with 4 part versions (1.2.3.4)', () => {
       expect(dependencies.rpmVersionSupportsBooleanDependencies('4.1.12.2')).to.equal(false)
     })
+
+    it('compares version components numerically, not lexicographically', () => {
+      expect(dependencies.rpmVersionSupportsBooleanDependencies('4.9.0')).to.equal(false)
+      expect(dependencies.rpmVersionSupportsBooleanDependencies('4.13.0')).to.equal(true)
+      expect(dependencies.rpmVersionSupportsBooleanDependencies('5.0.0')).to.equal(true)
+    })
   })
 
   describe('trashRequiresAsBoolean', () => {

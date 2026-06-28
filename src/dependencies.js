@@ -64,8 +64,8 @@ const dependencies = {
    * RPM does not follow semantic versioning, so `semver` cannot be used.
    */
   rpmVersionSupportsBooleanDependencies (rpmVersionString) {
-    const rpmVersion = rpmVersionString.split('.').slice(0, 3).map(n => parseInt(n))
-    return rpmVersion >= [4, 13, 0]
+    const [major, minor] = rpmVersionString.split('.').slice(0, 3).map(n => parseInt(n) || 0)
+    return major > 4 || (major === 4 && minor >= 13)
   },
 
   /**
