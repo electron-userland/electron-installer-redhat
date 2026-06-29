@@ -128,6 +128,28 @@ describe('module', () => {
   )
 
   describeInstaller(
+    'with default requires and desktop entry',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        arch: 'x86'
+      }
+    },
+    'includes libsecret in Requires and desktop defaults',
+    async outputDir => {
+      await assertASARRpmExists(outputDir)
+      const requires = await spawn('rpm', ['-qp', '--requires', 'footest.x86.rpm'], { cwd: outputDir })
+      if (!requires.includes('libsecret')) {
+        throw new Error(`libsecret missing from Requires:\n ${requires}`)
+      }
+      const desktop = await spawn('rpm', ['-qp', '-l', 'footest.x86.rpm'], { cwd: outputDir })
+      if (!desktop.includes('/usr/share/applications/footest.desktop')) {
+        throw new Error(`desktop file missing from package:\n ${desktop}`)
+      }
+    }
+  )
+
+  describeInstaller(
     'with an app with installation scripts as paths',
     {
       src: 'test/fixtures/app-without-asar/',
