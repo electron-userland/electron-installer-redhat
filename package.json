@@ -52,7 +52,7 @@
     "lint-staged": "^10.2.7",
     "oxlint": "^1.59.0",
     "promise-retry": "^2.0.1",
-    "sinon": "^11.1.0",
+    "sinon": "^22.0.0",
     "tmp-promise": "^3.0.2"
   },
   "lint-staged": {
