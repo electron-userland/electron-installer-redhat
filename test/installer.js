@@ -2,9 +2,9 @@
 
 const access = require('./helpers/access')
 const { describeInstaller, tempOutputDir, testInstallerOptions } = require('./helpers/describe_installer')
-const fs = require('fs-extra')
+const fs = require('node:fs/promises')
 const installer = require('..')
-const path = require('path')
+const path = require('node:path')
 const { spawn } = require('@malept/cross-spawn-promise')
 
 const assertASARRpmExists = outputDir =>
@@ -14,9 +14,14 @@ const assertNonASARRpmExists = outputDir =>
   access(path.join(outputDir, 'bartest.x86_64.rpm'))
 
 const updateJSON = async (filename, updateFunc) => {
-  const packageJSON = await fs.readJson(filename)
+  const packageJSON = JSON.parse(await fs.readFile(filename, 'utf8'))
   updateFunc(packageJSON)
-  await fs.writeJson(filename, packageJSON)
+  await fs.writeFile(filename, JSON.stringify(packageJSON, null, 2))
+}
+
+const recreateDir = async dir => {
+  await fs.rm(dir, { recursive: true, force: true })
+  await fs.mkdir(dir, { recursive: true })
 }
 
 describe('module', function () {
@@ -55,16 +60,16 @@ describe('module', function () {
     assertNonASARRpmExists
   )
 
-  describe('with an app without a homepage or author URL', test => {
+  describe('with an app without a homepage or author URL', () => {
     const baseDir = tempOutputDir('app-without-homepage')
     let outputDir
 
-    after(async () => fs.remove(baseDir))
-    after(async () => fs.remove(outputDir))
+    after(async () => fs.rm(baseDir, { recursive: true, force: true }))
+    after(async () => fs.rm(outputDir, { recursive: true, force: true }))
 
     before(async () => {
-      await fs.emptyDir(baseDir)
-      await fs.copy('test/fixtures/app-without-asar', baseDir)
+      await recreateDir(baseDir)
+      await fs.cp('test/fixtures/app-without-asar', baseDir, { recursive: true })
       await updateJSON(path.join(baseDir, 'resources', 'app', 'package.json'), packageJSON => {
         packageJSON.author = 'Test Author'
       })
@@ -75,16 +80,16 @@ describe('module', function () {
     it('generates a `.rpm` package', () => assertNonASARRpmExists(outputDir))
   })
 
-  describe('with an app having hyphens in its version string', test => {
+  describe('with an app having hyphens in its version string', () => {
     const baseDir = tempOutputDir('app-with-hyphen')
     let outputDir
 
-    after(async () => fs.remove(baseDir))
-    after(async () => fs.remove(outputDir))
+    after(async () => fs.rm(baseDir, { recursive: true, force: true }))
+    after(async () => fs.rm(outputDir, { recursive: true, force: true }))
 
     before(async () => {
-      await fs.emptyDir(baseDir)
-      await fs.copy('test/fixtures/app-without-asar', baseDir)
+      await recreateDir(baseDir)
+      await fs.cp('test/fixtures/app-without-asar', baseDir, { recursive: true })
       await updateJSON(path.join(baseDir, 'resources', 'app', 'package.json'), packageJSON => {
         packageJSON.version = '1.0.0-beta+internal-only.0'
       })

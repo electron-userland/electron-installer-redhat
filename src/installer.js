@@ -1,10 +1,9 @@
 'use strict'
 
-const _ = require('lodash')
 const common = require('electron-installer-common')
 const debug = require('debug')
-const fs = require('fs-extra')
-const path = require('path')
+const fs = require('node:fs/promises')
+const path = require('node:path')
 const wrap = require('word-wrap')
 
 const redhatDependencies = require('./dependencies')
@@ -13,7 +12,7 @@ const util = require('./util')
 
 const defaultLogger = debug('electron-installer-redhat')
 
-const defaultRename = function (dest, src) {
+const defaultRename = function (dest) {
   return path.join(dest, '<%= name %>-<%= version %>-<%= revision %>.<%= arch %>.rpm')
 }
 
@@ -141,7 +140,7 @@ class RedhatInstaller extends common.ElectronInstaller {
   async generateScripts () {
     const scriptNames = ['pre', 'post', 'preun', 'postun']
 
-    return Promise.all(_.map(this.options.scripts, async (item, key) => {
+    return Promise.all(Object.entries(this.options.scripts || {}).map(async ([key, item]) => {
       if (scriptNames.includes(key)) {
         this.options.logger(`Creating installation script ${key}`)
         this.options[key] = (await fs.readFile(item)).toString()

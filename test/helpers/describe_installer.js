@@ -1,16 +1,15 @@
 'use strict'
 
-const _ = require('lodash')
-const fs = require('fs-extra')
-const os = require('os')
-const path = require('path')
+const fs = require('node:fs/promises')
+const os = require('node:os')
+const path = require('node:path')
 const tmp = require('tmp-promise')
 
 const installer = require('../..')
 
 module.exports = {
   describeInstaller: function describeInstaller (description, installerOptions, itDescription, itFunc) {
-    describe(description, test => {
+    describe(description, () => {
       const outputDir = module.exports.tempOutputDir(installerOptions.dest)
       const options = module.exports.testInstallerOptions(outputDir, installerOptions)
 
@@ -23,7 +22,7 @@ module.exports = {
   },
 
   cleanupOutputDir: function cleanupOutputDir (outputDir) {
-    after(async () => fs.remove(outputDir))
+    after(async () => fs.rm(outputDir, { recursive: true, force: true }))
   },
 
   tempOutputDir: function tempOutputDir (customDir) {
@@ -31,13 +30,16 @@ module.exports = {
   },
 
   testInstallerOptions: function testInstallerOptions (outputDir, installerOptions) {
-    return _.merge({
+    return {
       rename: rpmFile => {
         return path.join(rpmFile, '<%= name %>.<%= arch %>.rpm')
       },
+      ...installerOptions,
       options: {
-        arch: 'x86_64'
-      }
-    }, installerOptions, { dest: outputDir })
+        arch: 'x86_64',
+        ...installerOptions.options
+      },
+      dest: outputDir
+    }
   }
 }
