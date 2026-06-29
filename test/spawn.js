@@ -1,7 +1,7 @@
-'use strict'
+import { after, before, describe, it } from 'node:test'
+import { expect } from 'chai'
 
-const chai = require('chai')
-const spawn = require('../src/spawn')
+import spawn from '../src/spawn.js'
 
 describe('spawn', () => {
   let oldPath
@@ -16,7 +16,7 @@ describe('spawn', () => {
       await spawn('rpmbuild', ['--version'], () => { })
       throw new Error('rpmbuild should not have been executed')
     } catch (error) {
-      chai.expect(error.message).to.match(/Error executing command \(rpmbuild --version\):\nYour system is missing the rpm/)
+      expect(error.message).to.match(/Error executing command \(rpmbuild --version\):\nYour system is missing the rpm/)
     }
   })
 

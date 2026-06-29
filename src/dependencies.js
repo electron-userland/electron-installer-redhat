@@ -1,7 +1,6 @@
-'use strict'
+import common from 'electron-installer-common'
 
-const common = require('electron-installer-common')
-const spawn = require('./spawn')
+import spawn from './spawn.js'
 
 const dependencyMap = {
   atspi: 'at-spi2-core',
@@ -24,57 +23,62 @@ const dependencyMap = {
   xtst: '(libXtst or libXtst6)'
 }
 
-/**
- * Retrieves the RPM version number and determines whether it has support for boolean
- * dependencies (>= 4.13.0).
- */
-async function rpmSupportsBooleanDependencies (logger) {
-  return rpmVersionSupportsBooleanDependencies(await getRpmVersion(logger))
-}
-
-async function getRpmVersion (logger) {
-  const versionOutput = await spawn('rpmbuild', ['--version'], logger)
-  return versionOutput.trim().split(' ').at(-1)
-}
-
-/**
- * Determine whether the RPM version string has support for boolean dependencies (>= 4.13.0).
- *
- * RPM does not follow semantic versioning, so `semver` cannot be used.
- */
-function rpmVersionSupportsBooleanDependencies (rpmVersionString) {
-  const rpmVersion = rpmVersionString.split('.').slice(0, 3).map(n => parseInt(n))
-  return rpmVersion >= [4, 13, 0]
-}
-
-/**
- * Transforms the list of trash requires into an RPM boolean dependency list.
- */
-function trashRequiresAsBoolean (electronVersion, dependencyMap) {
-  const trashDepends = common.getTrashDepends(electronVersion, dependencyMap)
-  if (trashDepends.length === 1) {
-    return [trashDepends[0]]
-  } else {
-    return [`(${trashDepends.join(' or ')})`]
-  }
-}
-
-module.exports = {
+const dependencies = {
   dependencyMap,
+
   /**
    * The dependencies for Electron itself, given an Electron version.
    */
   forElectron: async function dependenciesForElectron (electronVersion, logger) {
     const requires = common.getDepends(electronVersion, dependencyMap)
-    if (await module.exports.rpmSupportsBooleanDependencies(logger)) {
-      const trashRequires = trashRequiresAsBoolean(electronVersion, dependencyMap)
+    if (await dependencies.rpmSupportsBooleanDependencies(logger)) {
+      const trashRequires = dependencies.trashRequiresAsBoolean(electronVersion, dependencyMap)
       return { requires: requires.concat(trashRequires) }
     } else {
       throw new Error('Please upgrade to RPM 4.13 or above, which supports boolean dependencies.\nThis is used to express Electron dependencies for a wide variety of RPM-using distributions.')
     }
   },
-  getRpmVersion,
-  rpmSupportsBooleanDependencies,
-  rpmVersionSupportsBooleanDependencies,
-  trashRequiresAsBoolean
+
+  async getRpmVersion (logger) {
+    return dependencies.parseRpmVersionOutput(await spawn('rpmbuild', ['--version'], logger))
+  },
+
+  /**
+   * Extracts the version number from the output of `rpmbuild --version`.
+   */
+  parseRpmVersionOutput (versionOutput) {
+    return versionOutput.trim().split(' ').at(-1)
+  },
+
+  /**
+   * Retrieves the RPM version number and determines whether it has support for boolean
+   * dependencies (>= 4.13.0).
+   */
+  async rpmSupportsBooleanDependencies (logger) {
+    return dependencies.rpmVersionSupportsBooleanDependencies(await dependencies.getRpmVersion(logger))
+  },
+
+  /**
+   * Determine whether the RPM version string has support for boolean dependencies (>= 4.13.0).
+   *
+   * RPM does not follow semantic versioning, so `semver` cannot be used.
+   */
+  rpmVersionSupportsBooleanDependencies (rpmVersionString) {
+    const [major, minor] = rpmVersionString.split('.').slice(0, 3).map(n => parseInt(n) || 0)
+    return major > 4 || (major === 4 && minor >= 13)
+  },
+
+  /**
+   * Transforms the list of trash requires into an RPM boolean dependency list.
+   */
+  trashRequiresAsBoolean (electronVersion, dependencyMap) {
+    const trashDepends = common.getTrashDepends(electronVersion, dependencyMap)
+    if (trashDepends.length === 1) {
+      return [trashDepends[0]]
+    } else {
+      return [`(${trashDepends.join(' or ')})`]
+    }
+  }
 }
+
+export default dependencies
