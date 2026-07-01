@@ -1,11 +1,13 @@
-'use strict'
+import { after, before, describe, it } from 'node:test'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
-const access = require('./helpers/access')
-const { describeInstaller, tempOutputDir, testInstallerOptions } = require('./helpers/describe_installer')
-const fs = require('node:fs/promises')
-const installer = require('..')
-const path = require('node:path')
-const { spawn } = require('@malept/cross-spawn-promise')
+import { spawn } from '@malept/cross-spawn-promise'
+
+import installer from '../src/installer.js'
+
+import access from './helpers/access.js'
+import { describeInstaller, tempOutputDir, testInstallerOptions } from './helpers/describe_installer.js'
 
 const assertASARRpmExists = outputDir =>
   access(path.join(outputDir, 'footest.x86.rpm'))
@@ -24,8 +26,7 @@ const recreateDir = async dir => {
   await fs.mkdir(dir, { recursive: true })
 }
 
-describe('module', function () {
-  this.timeout(10000)
+describe('module', () => {
 
   describeInstaller(
     'with an app with asar',
@@ -124,6 +125,28 @@ describe('module', function () {
     },
     'generates a .rpm package',
     assertASARRpmExists
+  )
+
+  describeInstaller(
+    'with default requires and desktop entry',
+    {
+      src: 'test/fixtures/app-with-asar/',
+      options: {
+        arch: 'x86'
+      }
+    },
+    'includes libsecret in Requires and desktop defaults',
+    async outputDir => {
+      await assertASARRpmExists(outputDir)
+      const requires = await spawn('rpm', ['-qp', '--requires', 'footest.x86.rpm'], { cwd: outputDir })
+      if (!requires.includes('libsecret')) {
+        throw new Error(`libsecret missing from Requires:\n ${requires}`)
+      }
+      const desktop = await spawn('rpm', ['-qp', '-l', 'footest.x86.rpm'], { cwd: outputDir })
+      if (!desktop.includes('/usr/share/applications/footest.desktop')) {
+        throw new Error(`desktop file missing from package:\n ${desktop}`)
+      }
+    }
   )
 
   describeInstaller(

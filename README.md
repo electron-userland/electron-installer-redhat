@@ -154,7 +154,7 @@ $ npm install --save-dev electron-installer-redhat
 And write something like this:
 
 ```javascript
-const installer = require('electron-installer-redhat')
+import installer from 'electron-installer-redhat'
 
 const options = {
   src: 'dist/app-linux-x64/',
@@ -162,19 +162,19 @@ const options = {
   arch: 'x86_64'
 }
 
-async function main (options) {
-  console.log('Creating package (this may take a while)')
+console.log('Creating package (this may take a while)')
 
-  try {
-    await installer(options)
-    console.log(`Successfully created package at ${options.dest}`)
-  } catch (err) {
-    console.error(err, err.stack)
-    process.exit(1)
-  }
+try {
+  await installer(options)
+  console.log(`Successfully created package at ${options.dest}`)
+} catch (err) {
+  console.error(err, err.stack)
+  process.exit(1)
 }
-main(options)
 ```
+
+This package is an [ES module](https://nodejs.org/api/esm.html). On Node.js 22.12 and newer,
+CommonJS code can still load it with `require('electron-installer-redhat').default`.
 
 You'll end up with the package at `dist/installers/app-0.0.1-1.x86_64.rpm`.
 

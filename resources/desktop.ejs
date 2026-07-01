@@ -6,6 +6,8 @@ Exec=<%= name %> %U<% if (execArguments && execArguments.length) { %> <%= execAr
 Icon=<%= name %>
 StartupWMClass=<%= productName %>
 Type=Application
+Terminal=false
+StartupWMClass=<%= productName %>
 StartupNotify=true
 Categories=<%= categories.join(';') %>;
 <% if (mimeType.length) { %>MimeType=<%= mimeType.join(';') %>;<% } %>

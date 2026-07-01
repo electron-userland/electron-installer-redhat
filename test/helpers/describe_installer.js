@@ -1,45 +1,43 @@
-'use strict'
+import { after, before, describe, it } from 'node:test'
+import fs from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
 
-const fs = require('node:fs/promises')
-const os = require('node:os')
-const path = require('node:path')
-const tmp = require('tmp-promise')
+import tmp from 'tmp-promise'
 
-const installer = require('../..')
+import installer from '../../src/installer.js'
 
-module.exports = {
-  describeInstaller: function describeInstaller (description, installerOptions, itDescription, itFunc) {
-    describe(description, () => {
-      const outputDir = module.exports.tempOutputDir(installerOptions.dest)
-      const options = module.exports.testInstallerOptions(outputDir, installerOptions)
+export function describeInstaller (description, installerOptions, itDescription, itFunc) {
+  describe(description, () => {
+    const outputDir = tempOutputDir(installerOptions.dest)
+    const options = testInstallerOptions(outputDir, installerOptions)
 
-      before(async () => installer(options))
+    before(async () => installer(options))
 
-      it(itDescription, () => itFunc(outputDir))
+    it(itDescription, () => itFunc(outputDir))
 
-      module.exports.cleanupOutputDir(outputDir)
-    })
-  },
+    cleanupOutputDir(outputDir)
+  })
+}
 
-  cleanupOutputDir: function cleanupOutputDir (outputDir) {
-    after(async () => fs.rm(outputDir, { recursive: true, force: true }))
-  },
+export function cleanupOutputDir (outputDir) {
+  after(async () => fs.rm(outputDir, { recursive: true, force: true }))
+}
 
-  tempOutputDir: function tempOutputDir (customDir) {
-    return customDir ? path.join(os.tmpdir(), customDir) : tmp.tmpNameSync({ prefix: 'electron-installer-redhat-' })
-  },
+export function tempOutputDir (customDir) {
+  return customDir ? path.join(os.tmpdir(), customDir) : tmp.tmpNameSync({ prefix: 'electron-installer-redhat-' })
+}
 
-  testInstallerOptions: function testInstallerOptions (outputDir, installerOptions) {
-    return {
-      rename: rpmFile => {
-        return path.join(rpmFile, '<%= name %>.<%= arch %>.rpm')
-      },
-      ...installerOptions,
-      options: {
-        arch: 'x86_64',
-        ...installerOptions.options
-      },
-      dest: outputDir
-    }
+export function testInstallerOptions (outputDir, installerOptions) {
+  return {
+    rename: rpmFile => {
+      return path.join(rpmFile, '<%= name %>.<%= arch %>.rpm')
+    },
+    ...installerOptions,
+    options: {
+      arch: 'x86_64',
+      ...installerOptions.options
+    },
+    dest: outputDir
   }
 }

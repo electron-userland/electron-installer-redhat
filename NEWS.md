@@ -1,8 +1,9 @@
 # `electron-installer-redhat` - Changes by Version
 
-## [Unreleased]
+## New Release Notes on GitHub Releases
 
-[Unreleased]: https://github.com/electron-userland/electron-installer-redhat/compare/v3.4.0...main
+Release notes for new releases are now on [GitHub Releases](https://github.com/electron-userland/electron-installer-redhat/releases)
+for the repository.
 
 ### Removed
 
@@ -11,6 +12,10 @@
 
 ### Changed
 
+* `libsecret` is now part of the default `Requires`, since Electron's `safeStorage` API uses it
+* Generated desktop entries now include `Terminal=false` and `StartupWMClass`
+* The package is now an ES module: use `import` instead of `require` (CommonJS consumers on
+  Node.js >= 22.12 can use `require('electron-installer-redhat').default`)
 * Switched package management to Yarn 4
 * Replaced ESLint with `oxlint`
 

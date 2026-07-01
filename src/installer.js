@@ -1,14 +1,12 @@
-'use strict'
+import common from 'electron-installer-common'
+import debug from 'debug'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import wrap from 'word-wrap'
 
-const common = require('electron-installer-common')
-const debug = require('debug')
-const fs = require('node:fs/promises')
-const path = require('node:path')
-const wrap = require('word-wrap')
-
-const redhatDependencies = require('./dependencies')
-const spawn = require('./spawn')
-const util = require('./util')
+import redhatDependencies from './dependencies.js'
+import spawn from './spawn.js'
+import * as util from './util.js'
 
 const defaultLogger = debug('electron-installer-redhat')
 
@@ -33,11 +31,11 @@ class RedhatInstaller extends common.ElectronInstaller {
   }
 
   get defaultDesktopTemplatePath () {
-    return path.resolve(__dirname, '../resources/desktop.ejs')
+    return path.resolve(import.meta.dirname, '../resources/desktop.ejs')
   }
 
   get defaultSpecTemplatePath () {
-    return path.resolve(__dirname, '../resources/spec.ejs')
+    return path.resolve(import.meta.dirname, '../resources/spec.ejs')
   }
 
   get packagePattern () {
@@ -93,7 +91,7 @@ class RedhatInstaller extends common.ElectronInstaller {
       version: pkg.version || '0.0.0',
       license: pkg.license,
       compressionLevel: 2,
-      icon: path.resolve(__dirname, '../resources/icon.png'),
+      icon: path.resolve(import.meta.dirname, '../resources/icon.png'),
       pre: undefined,
       post: undefined,
       preun: undefined,
@@ -160,7 +158,7 @@ class RedhatInstaller extends common.ElectronInstaller {
 
 /* ************************************************************************** */
 
-module.exports = async data => {
+export default async function createRedhatInstaller (data) {
   data.rename = data.rename || defaultRename
   data.logger = data.logger || defaultLogger
 
@@ -178,4 +176,4 @@ module.exports = async data => {
   return installer.options
 }
 
-module.exports.Installer = RedhatInstaller
+export { RedhatInstaller as Installer }
