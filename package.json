@@ -42,7 +42,7 @@
     "@malept/cross-spawn-promise": "^2.0.0",
     "debug": "^4.1.1",
     "electron-installer-common": "^0.10.3",
-    "which": "^5.0.0",
+    "which": "^7.0.0",
     "word-wrap": "^1.2.4",
     "yargs": "^18.0.0"
   },
